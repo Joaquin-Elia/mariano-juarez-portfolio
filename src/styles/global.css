@@ -38,12 +38,12 @@
 
 .big-text {
   font-weight: 700;
-  font-size: clamp(5.3rem, 10vw, 9rem);
+  font-size: clamp(5.3rem, 8.8vw, 9.5rem);
 }
 
 @media (min-width: 1600px) {
   .big-text {
-    font-size: 9vw;
+    font-size: 10vw;
   }
   .text-with-border {
     text-shadow:

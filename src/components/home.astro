@@ -1,0 +1,51 @@
+---
+import Header from "./header.astro";
+import Footer from "./footer.astro";
+---
+
+<section class="min-h-dvh overflow-x-hidden relative">
+  <Header />
+  <main>
+    <nav class="big-text px-3 lg:px-8 py-3 md:py-6 text-with-border leading-snug sm:leading-none">
+      <ul class="space-y-1 sm:space-y-3">
+        <li>
+          <a href="/proyectos" class="inline-block">
+            <h2 class="links-home">Proyectos</h2>
+          </a>
+        </li>
+        <li>
+          <a href="/galeria" class="inline-block">
+            <h2 class="links-home">Galería</h2>
+          </a>
+        </li>
+        <li>
+          <a href="/cv" class="hidden sm:inline-block">
+            <h2 class="links-home">Curriculum Vitae</h2>
+          </a>
+        </li>
+        <li>
+          <a href="/cv" class="sm:hidden inline-block">
+            <h2>CV</h2>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="bg-white/30 backdrop-blur-sm absolute -z-10 inset-0" />
+      <video
+        src="/videos/cloudsBg.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        class="h-full w-full object-cover object-bottom absolute inset-0 -z-20"
+      ></video>
+  </main>
+  <Footer />
+</section>
+
+<style>
+  @reference "../styles/global.css";
+  .links-home {
+    @apply lg:blur-[6px] hover:relative hover:z-10 lg:hover:blur-none transition-all duration-300;
+  }
+</style>
