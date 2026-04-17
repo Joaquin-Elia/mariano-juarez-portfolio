@@ -1,0 +1,97 @@
+<section class="flex gap-14 py-2 md:gap-28 relative font-space-mono font-bold">
+  <div class="marquee">
+    <div class="marquee-content">
+      <p class="marquee-text">
+        <span>contactme</span>
+        <span>-</span>
+        <span>mjrzfesta@gmail.com</span>
+      </p>
+      <p class="marquee-text">
+        <span>-</span>
+        <span>Disponible full time o freelance</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="marquee">
+    <div class="marquee-content">
+      <p class="marquee-text">
+        <span>contactme</span>
+        <span>-</span>
+        <span>mjrzfesta@gmail.com</span>
+      </p>
+      <p class="marquee-text">
+        <span>-</span>
+        <span>Disponible full time o freelance</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="marquee">
+    <div class="marquee-content">
+      <p class="marquee-text">
+        <span>contactme</span>
+        <span>-</span>
+        <span>mjrzfesta@gmail.com</span>
+      </p>
+      <p class="marquee-text">
+        <span>-</span>
+        <span>Disponible full time o freelance</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="marquee">
+    <div class="marquee-content">
+      <p class="marquee-text">
+        <span>contactme</span>
+        <span>-</span>
+        <span>mjrzfesta@gmail.com</span>
+      </p>
+      <p class="marquee-text">
+        <span>-</span>
+        <span>Disponible full time o freelance</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="marquee">
+    <div class="marquee-content">
+      <p class="marquee-text">
+        <span>contactme</span>
+        <span>-</span>
+        <span>mjrzfesta@gmail.com</span>
+      </p>
+      <p class="marquee-text">
+        <span>-</span>
+        <span>Disponible full time o freelance</span>
+      </p>
+    </div>
+  </div>
+  <a href="mailto:mjrzfesta@gmail.com" class="absolute inset-0"></a>
+</section>
+
+<style>
+  @reference "../styles/global.css";
+  .marquee {
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+  .marquee-content {
+    display: inline-flex;
+    animation: marquee 30s linear infinite;
+    @apply gap-14 md:gap-28;
+  }
+  .marquee-text {
+    text-transform: uppercase;
+    @apply space-x-1 text-xl md:text-2xl;
+  }
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+</style>
