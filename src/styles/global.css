@@ -1,17 +1,68 @@
 @import "tailwindcss";
 
 @font-face {
-    font-family: 'FKRasterRoman';
-    src: url('/fonts/FKRasterRomanCompactTrial-Smooth.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: "FKRasterRoman";
+  src: url("/fonts/FKRasterRomanCompactTrial-Smooth.otf") format("opentype");
+  /* font-weight: 700; */
+  /* font-display: swap; */
+}
+
+@font-face {
+  font-family: "SpaceMono";
+  src: url("/fonts/SpaceMono-Regular.ttf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 @theme {
-    --color-yellow: #f2ff27;
-    --color-black: #1e1e1e;
-    --color-gray: #f4f4f4;
+  --color-yellow: #f2ff27;
+  --color-black: #1e1e1e;
+  --color-gray: #f4f4f4;
 
-    --font-raster: "FKRasterRoman", ui-sans-serif, system-ui, sans-serif;
+  --font-raster: "FKRasterRoman", ui-sans-serif, system-ui, sans-serif;
+  --font-space-mono: "SpaceMono";
+  --font-space-mono-bold: "SpaceMonoBold";
+}
+
+.text-with-border {
+  font-family: var(--font-raster);
+  color: var(--color-black);
+  font-weight: 700;
+  text-shadow:
+    -4px -4px 0 var(--color-yellow),
+    4px -4px 0 var(--color-yellow),
+    -4px 4px 0 var(--color-yellow),
+    4px 4px 0 var(--color-yellow);
+}
+
+.big-text {
+  font-weight: 700;
+  font-size: clamp(5.3rem, 10vw, 9rem);
+}
+
+@media (min-width: 1600px) {
+  .big-text {
+    font-size: 9vw;
+  }
+  .text-with-border {
+    text-shadow:
+      -5px -5px 0 var(--color-yellow),
+      5px -5px 0 var(--color-yellow),
+      -5px 5px 0 var(--color-yellow),
+      5px 5px 0 var(--color-yellow);
+  }
+}
+
+@media (max-width: 385px) {
+  .big-text {
+    font-size: 4.6rem;
+  }
+    .text-with-border {
+    text-shadow:
+      -2px -2px 0 var(--color-yellow),
+      2px -2px 0 var(--color-yellow),
+      -2px 2px 0 var(--color-yellow),
+      2px 2px 0 var(--color-yellow);
+  }
 }
