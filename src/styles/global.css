@@ -15,6 +15,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "SpaceMonoBold";
+  src: url("/fonts/SpaceMono-Bold.ttf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-yellow: #f2ff27;
   --color-black: #1e1e1e;
@@ -38,12 +46,12 @@
 
 .big-text {
   font-weight: 700;
-  font-size: clamp(5.3rem, 8.8vw, 9.5rem);
+  font-size: clamp(5.3rem, 8.8vw, 10rem);
 }
 
-@media (min-width: 1600px) {
+@media (min-width: 2000px) {
   .big-text {
-    font-size: 10vw;
+    font-size: 9.5vw;
   }
   .text-with-border {
     text-shadow:
