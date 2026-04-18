@@ -1,6 +1,7 @@
 ---
 import Header from "./header.astro";
 import Footer from "./footer.astro";
+import Projects from "./projects.astro";
 ---
 
 <section class="min-h-dvh overflow-x-hidden relative">
@@ -9,9 +10,7 @@ import Footer from "./footer.astro";
     <nav class="big-text px-3 lg:px-8 py-3 md:py-6 text-with-border leading-snug sm:leading-none">
       <ul class="space-y-1 sm:space-y-3">
         <li>
-          <a href="/proyectos" class="inline-block">
-            <h2 class="links-home">Proyectos</h2>
-          </a>
+          <Projects />
         </li>
         <li>
           <a href="/galeria" class="inline-block">
@@ -30,7 +29,7 @@ import Footer from "./footer.astro";
         </li>
       </ul>
     </nav>
-    <div class="bg-white/30 backdrop-blur-sm absolute -z-10 inset-0" />
+    <div class="backdrop-blur-sm absolute -z-10 inset-0" />
       <video
         src="/videos/cloudsBg.mp4"
         autoplay
@@ -43,9 +42,12 @@ import Footer from "./footer.astro";
   <Footer />
 </section>
 
-<style>
+<style is:global>
   @reference "../styles/global.css";
   .links-home {
     @apply lg:blur-[6px] hover:relative hover:z-10 lg:hover:blur-none transition-all duration-300;
+  }
+  .project-title-active {
+    @apply lg:blur-none lg:relative lg:z-10;
   }
 </style>

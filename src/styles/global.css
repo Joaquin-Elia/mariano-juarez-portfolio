@@ -45,6 +45,7 @@
 }
 
 .big-text {
+  font-family: var(--font-raster);
   font-weight: 700;
   font-size: clamp(5.3rem, 8.8vw, 10rem);
 }

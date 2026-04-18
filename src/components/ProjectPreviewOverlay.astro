@@ -1,0 +1,143 @@
+---
+---
+
+<div id="project-preview-overlay" class="fixed inset-0 mt-10 pointer-events-none z-70 hidden lg:block overflow-hidden">
+  <div id="project-preview-container" class="absolute w-80 aspect-4/3 opacity-0 scale-90 overflow-hidden origin-bottom">
+    <img 
+      id="project-preview-image" 
+      src="" 
+      alt="Project Preview" 
+      class="w-full h-full object-cover"
+    />
+  </div>
+</div>
+
+<script>
+  import gsap from "gsap";
+
+  let mm: gsap.MatchMedia;
+
+  const initPreview = () => {
+    if (mm) mm.revert();
+    mm = gsap.matchMedia();
+
+    mm.add("(min-width: 1024px)", () => {
+      const overlay = document.getElementById("project-preview-overlay");
+      const container = document.getElementById("project-preview-container");
+      const image = document.getElementById("project-preview-image") as HTMLImageElement;
+      const items = document.querySelectorAll(".project-item");
+      
+      if (!overlay || !container || !image || items.length === 0) return;
+
+      let targetX = 0;
+      let targetY = 0;
+      let currentX = 0;
+      let currentY = 0;
+      let rafId: number | null = null;
+      let isHovering = false;
+
+      // Initial resting state
+      gsap.set(container, { xPercent: -50, yPercent: 8, opacity: 0, scale: 0.9 });
+
+      const updatePosition = () => {
+        currentX += (targetX - currentX) * 0.15;
+        currentY += (targetY - currentY) * 0.15;
+        
+        gsap.set(container, { x: currentX, y: currentY });
+        
+        if (isHovering) {
+          rafId = requestAnimationFrame(updatePosition);
+        } else {
+          // If we stopped hovering, update one last frame then kill raf
+          rafId = requestAnimationFrame(() => {
+             gsap.set(container, { x: currentX, y: currentY });
+             rafId = null;
+          });
+        }
+      };
+
+      const handleMouseMove = (e: MouseEvent) => {
+        targetX = e.clientX;
+        targetY = e.clientY;
+      };
+
+      const onMouseEnter = (e: Event) => {
+        const target = e.currentTarget as HTMLElement;
+        const imgSrc = target.getAttribute("data-image");
+        if (!imgSrc) return;
+
+        // Visual flash if changing source
+        if (image.getAttribute("src") !== imgSrc) {
+          gsap.fromTo(image, { opacity: 0.5 }, { opacity: 1, duration: 0.2 });
+        }
+        image.src = imgSrc;
+        
+        isHovering = true;
+        const mouseEvent = e as MouseEvent;
+        
+        // Tracking logic
+        targetX = mouseEvent.clientX;
+        targetY = mouseEvent.clientY;
+        
+        if (currentX === 0 && currentY === 0) {
+          currentX = targetX;
+          currentY = targetY;
+          gsap.set(container, { x: currentX, y: currentY });
+        }
+
+        document.addEventListener("mousemove", handleMouseMove);
+        if (rafId === null) {
+          rafId = requestAnimationFrame(updatePosition);
+        }
+
+        // Show image
+        gsap.to(container, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.4, // fast show like in user config
+          ease: "power2.out",
+          overwrite: "auto"
+        });
+      };
+
+      const onMouseLeave = () => {
+        isHovering = false;
+        
+        // Hide image
+        gsap.to(container, {
+          opacity: 0,
+          scale: 0.9,
+          duration: 0.3,
+          ease: "power2.in",
+          overwrite: "auto",
+          onComplete: () => {
+            if (!isHovering) {
+              document.removeEventListener("mousemove", handleMouseMove);
+              currentX = 0;
+              currentY = 0;
+            }
+          }
+        });
+      };
+
+      items.forEach((item) => {
+        item.addEventListener("mouseenter", onMouseEnter);
+        item.addEventListener("mouseleave", onMouseLeave);
+      });
+
+      // return cleanup function for matchMedia
+      return () => {
+        items.forEach((item) => {
+          item.removeEventListener("mouseenter", onMouseEnter);
+          item.removeEventListener("mouseleave", onMouseLeave);
+        });
+        document.removeEventListener("mousemove", handleMouseMove);
+        if (rafId !== null) cancelAnimationFrame(rafId);
+      };
+    });
+  };
+
+  initPreview();
+  // Safe cleanup and re-evaluation upon Astro view transition navigation
+  document.addEventListener("astro:page-load", initPreview);
+</script>

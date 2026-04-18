@@ -1,0 +1,132 @@
+---
+import ProjectItem from "./ProjectItem.astro";
+import ProjectPreviewOverlay from "./ProjectPreviewOverlay.astro";
+
+const projects = [
+  { name: "VIRUS 2000", imageSrc: "/images/1.jpeg", wrapperClass: "lg:relative" },
+  {
+    name: "FLYEMIGRATES",
+    imageSrc: "/images/2.jpeg",
+    wrapperClass: "lg:absolute lg:ml-20 lg:left-[14rem] lg:top-0",
+  },
+  {
+    name: "TUMBANDANDO EL CLUB",
+    imageSrc: "/images/3.jpeg",
+    wrapperClass: "lg:-ml-1 lg:-mt-0.5",
+  },
+  {
+    name: "CERRO CATEDRAL",
+    imageSrc: "/images/4.jpeg",
+    wrapperClass: "lg:-mt-0.5 lg:ml-64",
+  },
+];
+---
+
+<div class="relative w-max">
+  <button id="projects-trigger" class="inline-flex text-left cursor-pointer">
+    <h2 class="text-with-border links-home">Proyectos</h2>
+  </button>
+
+  <div
+    id="projects-container"
+    class="hidden flex-col mt-4 lg:absolute lg:top-0 lg:left-full lg:mt-10 lg:ml-20 lg:w-120 z-40 gap-2 lg:gap-0 lg:pb-0 pointer-events-none sm:pointer-events-auto"
+  >
+    {
+      projects.map((project) => (
+        <ProjectItem
+          name={project.name}
+          imageSrc={project.imageSrc}
+          wrapperClass={project.wrapperClass}
+        />
+      ))
+    }
+  </div>
+
+  <ProjectPreviewOverlay />
+</div>
+
+<script>
+  import gsap from "gsap";
+
+  // Re-selecting every time to avoid Astro HMR caching issues
+  const initProjects = () => {
+    const btn = document.getElementById("projects-trigger");
+    const container = document.getElementById("projects-container");
+    const wrappers = gsap.utils.toArray(".project-item") as HTMLElement[];
+
+    let isOpen = false;
+
+    // Clear old listeners if HMR is active
+    const newBtn = btn?.cloneNode(true);
+    if (newBtn && btn?.parentNode) {
+      btn.parentNode.replaceChild(newBtn, btn);
+    }
+
+    const title = newBtn
+      ? (newBtn as HTMLElement).querySelector(".links-home")
+      : null;
+
+    newBtn?.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (!isOpen) {
+        container?.classList.remove("hidden");
+        container?.classList.add("flex");
+        title?.classList.add("project-title-active");
+
+        gsap.fromTo(
+          wrappers,
+          { x: -20, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 0.4,
+            stagger: 0.08,
+            ease: "power2.out",
+          },
+        );
+        isOpen = true;
+      } else {
+        gsap.to(wrappers, {
+          x: 20,
+          opacity: 0,
+          duration: 0.3,
+          stagger: 0.05,
+          ease: "power2.in",
+          onComplete: () => {
+            container?.classList.add("hidden");
+            container?.classList.remove("flex");
+            title?.classList.remove("project-title-active");
+          },
+        });
+        isOpen = false;
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      if (
+        isOpen &&
+        newBtn &&
+        container &&
+        !newBtn.contains(e.target as Node) &&
+        !container.contains(e.target as Node)
+      ) {
+        gsap.to(wrappers, {
+          x: 20,
+          opacity: 0,
+          duration: 0.3,
+          stagger: 0.05,
+          ease: "power2.in",
+          onComplete: () => {
+            container?.classList.add("hidden");
+            container?.classList.remove("flex");
+            title?.classList.remove("project-title-active");
+            isOpen = false;
+          },
+        });
+      }
+    });
+  };
+
+  initProjects();
+  document.addEventListener("astro:page-load", initProjects);
+</script>
