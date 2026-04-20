@@ -1,18 +1,8 @@
 ---
-import "../styles/global.css";
+import Layout from "../layouts/Layout.astro";
 import Home from "../components/home.astro";
 ---
 
-<html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Mariano Juarez - Portfolio</title>
-  </head>
-  <body>
-    <Home />
-  </body>
-</html>
+<Layout>
+  <Home />
+</Layout>

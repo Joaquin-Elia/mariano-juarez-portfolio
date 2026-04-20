@@ -67,11 +67,39 @@
   .big-text {
     font-size: 4.6rem;
   }
-    .text-with-border {
+  .text-with-border {
     text-shadow:
       -2px -2px 0 var(--color-yellow),
       2px -2px 0 var(--color-yellow),
       -2px 2px 0 var(--color-yellow),
       2px 2px 0 var(--color-yellow);
   }
+}
+
+@keyframes moveOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0.5;
+    transform: translateY(-35%);
+  }
+}
+
+@keyframes moveIn {
+  from {
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  }
+  to {
+    clip-path: polygon(0 100%, 100% 100%, 100% 0%, 0 0%);
+  }
+}
+
+::view-transition-old(root) {
+  animation: 1.5s cubic-bezier(0.87, 0, 0.13, 1) both moveOut;
+}
+
+::view-transition-new(root) {
+  animation: 1.5s cubic-bezier(0.87, 0, 0.13, 1) both moveIn;
 }
