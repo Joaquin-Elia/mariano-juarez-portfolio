@@ -1,0 +1,68 @@
+---
+// interface Props {
+//   text?: string;
+//   blockColor?: string;
+//   duration?: number;
+//   delay?: number;
+//   stagger?: number;
+//   easing?: string;
+//   class?: string;
+//   as?: any;
+// }
+
+const {
+  text = "",
+  blockColor = "#000",
+  duration = 0.4,
+  delay = 0,
+  stagger = 0.08,
+  easing = "power2.inOut",
+  class: className = "",
+  as: Tag = "div",
+} = Astro.props;
+---
+
+<Tag
+  class={`block-reveal-component ${className}`}
+  data-block-color={blockColor}
+  data-duration={duration}
+  data-delay={delay}
+  data-stagger={stagger}
+  data-easing={easing}
+>
+  <slot>{text}</slot>
+</Tag>
+
+<script>
+  import { BlockReveal } from "../utils/BlockReveal";
+
+  const initBlockReveals = () => {
+    // Asegurarnos de que las fuentes estén cargadas antes de calcular el salto de línea (offsetTop)
+    document.fonts.ready.then(() => {
+      // Re-select all components to ensure we catch those added by View Transitions or HMR
+      const elements = document.querySelectorAll(".block-reveal-component");
+      
+      elements.forEach((el) => {
+        // Re-add initialized class for CSS visibility toggle
+        el.classList.add("initialized");
+        
+        requestAnimationFrame(() => {
+          new BlockReveal(el as HTMLElement);
+        });
+      });
+    });
+  };
+
+  // Run on initial load
+  initBlockReveals();
+  
+  // Re-run on every navigation/page swap via View Transitions
+  document.addEventListener("astro:page-load", initBlockReveals);
+</script>
+
+<style is:global>
+  /* Prevent Flash of Unstyled Text */
+  .block-reveal-component:not(.initialized) {
+    visibility: hidden;
+  }
+</style>
