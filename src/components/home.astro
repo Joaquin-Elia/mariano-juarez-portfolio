@@ -2,42 +2,63 @@
 import Header from "./header.astro";
 import Footer from "./footer.astro";
 import Projects from "./projects.astro";
+import BlockReveal from "./BlockReveal.astro";
 ---
 
 <section class="min-h-dvh overflow-x-hidden relative">
   <Header />
   <main>
-    <nav class="big-text px-3 lg:px-8 py-3 md:py-6 text-with-border leading-snug sm:leading-none">
+    <nav
+      class="big-text px-3 lg:px-8 py-3 md:py-6 text-with-border leading-snug sm:leading-none"
+    >
       <ul class="space-y-1 sm:space-y-3">
         <li>
           <Projects />
         </li>
         <li>
           <a href="/galeria" class="inline-block">
-            <h2 class="links-home">Galería</h2>
+            <BlockReveal
+              as="h2"
+              class="links-home"
+              blockColor="var(--color-yellow)"
+            >
+              Galería
+            </BlockReveal>
           </a>
         </li>
         <li>
           <a href="/cv" class="hidden sm:inline-block">
-            <h2 class="links-home">Curriculum Vitae</h2>
+            <BlockReveal
+              as="h2"
+              class="links-home"
+              blockColor="var(--color-yellow)"
+            >
+              Curriculum Vitae
+            </BlockReveal>
           </a>
         </li>
         <li>
           <a href="/cv" class="sm:hidden inline-block">
-            <h2>CV</h2>
+            <BlockReveal
+              as="h2"
+              class="links-home"
+              blockColor="var(--color-yellow)"
+            >
+              CV
+            </BlockReveal>
           </a>
         </li>
       </ul>
     </nav>
-    <div class="backdrop-blur-sm absolute -z-10 inset-0" />
-      <video
-        src="/videos/cloudsBg.mp4"
-        autoplay
-        muted
-        loop
-        playsinline
-        class="h-full w-full object-cover object-bottom absolute inset-0 -z-20"
-      ></video>
+    <div class="backdrop-blur-sm absolute -z-10 inset-0"></div>
+    <video
+      src="/videos/cloudsBg.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+      class="h-full w-full object-cover object-bottom absolute inset-0 -z-20"
+    ></video>
   </main>
   <Footer />
 </section>
@@ -45,9 +66,12 @@ import Projects from "./projects.astro";
 <style is:global>
   @reference "../styles/global.css";
   .links-home {
-    @apply lg:blur-[6px] hover:relative hover:z-10 lg:hover:blur-none transition-all duration-300;
+    @apply transition-all duration-300 hover:relative hover:z-10;
+  }
+  .links-home.reveal-complete {
+    @apply lg:blur-[6px] lg:hover:blur-none;
   }
   .project-title-active {
-    @apply lg:blur-none lg:relative lg:z-10;
+    @apply lg:blur-none! lg:relative lg:z-10;
   }
 </style>

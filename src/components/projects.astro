@@ -1,9 +1,14 @@
 ---
+import BlockReveal from "./BlockReveal.astro";
 import ProjectItem from "./ProjectItem.astro";
 import ProjectPreviewOverlay from "./ProjectPreviewOverlay.astro";
 
 const projects = [
-  { name: "VIRUS 2000", imageSrc: "/images/1.jpeg", wrapperClass: "lg:relative" },
+  {
+    name: "VIRUS 2000",
+    imageSrc: "/images/1.jpeg",
+    wrapperClass: "lg:relative",
+  },
   {
     name: "FLYEMIGRATES",
     imageSrc: "/images/2.jpeg",
@@ -24,7 +29,13 @@ const projects = [
 
 <div class="relative w-max">
   <button id="projects-trigger" class="inline-flex text-left cursor-pointer">
-    <h2 class="text-with-border links-home">Proyectos</h2>
+    <BlockReveal
+      as="h2"
+      class="text-with-border links-home"
+      blockColor="var(--color-yellow)"
+    >
+      Proyectos
+    </BlockReveal>
   </button>
 
   <div
