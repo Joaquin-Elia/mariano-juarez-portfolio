@@ -2,18 +2,21 @@
 interface Props {
   name: string;
   imageSrc: string;
+  videoSrc: string;
+  videoStyle: string;
   wrapperClass?: string;
 }
 
-const { name, imageSrc, wrapperClass = "" } = Astro.props;
+const { name, videoSrc, videoStyle, wrapperClass = "" } = Astro.props;
 ---
 
 <div
   class={`project-item opacity-0 w-max relative flex items-center group ${wrapperClass}`}
-  data-image={imageSrc}
+  data-video={videoSrc}
+  video-style={videoStyle}
 >
   <h3
-    class="project-title bg-yellow text-black font-space-mono-bold text-3xl lg:text-4xl uppercase px-1 leading-none transition-all duration-300 cursor-pointer block tracking-tighter group-hover:mix-blend-difference group-hover:z-10"
+    class="project-title bg-yellow text-black font-space-mono-bold text-3xl lg:text-4xl uppercase px-1 leading-none transition-all duration-300 cursor-pointer block tracking-tighter group-hover:invert group-hover:z-10"
   >
     {name}
   </h3>

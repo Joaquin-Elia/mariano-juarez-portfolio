@@ -2,11 +2,21 @@
 ---
 
 <div id="project-preview-overlay" class="fixed inset-0 mt-10 pointer-events-none z-70 hidden lg:block overflow-hidden">
-  <div id="project-preview-container" class="absolute w-80 aspect-4/3 opacity-0 scale-90 overflow-hidden origin-bottom">
-    <img 
+  <div id="project-preview-container" class="absolute aspect-auto opacity-0 scale-90 overflow-hidden origin-bottom">
+    <!-- <img 
       id="project-preview-image" 
       src="" 
       alt="Project Preview" 
+      class="w-full h-full object-cover"
+    /> -->
+    <video
+      id="project-preview-video"
+      src=""
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
       class="w-full h-full object-cover"
     />
   </div>
@@ -24,10 +34,10 @@
     mm.add("(min-width: 1024px)", () => {
       const overlay = document.getElementById("project-preview-overlay");
       const container = document.getElementById("project-preview-container");
-      const image = document.getElementById("project-preview-image") as HTMLImageElement;
+      const video = document.getElementById("project-preview-video") as HTMLVideoElement;
       const items = document.querySelectorAll(".project-item");
       
-      if (!overlay || !container || !image || items.length === 0) return;
+      if (!overlay || !container || !video || items.length === 0) return;
 
       let targetX = 0;
       let targetY = 0;
@@ -63,14 +73,16 @@
 
       const onMouseEnter = (e: Event) => {
         const target = e.currentTarget as HTMLElement;
-        const imgSrc = target.getAttribute("data-image");
-        if (!imgSrc) return;
+        const videoSrc = target.getAttribute("data-video");
+        const videoStyle = target.getAttribute("video-style");
+        if (!videoSrc || !videoStyle) return;
 
         // Visual flash if changing source
-        if (image.getAttribute("src") !== imgSrc) {
-          gsap.fromTo(image, { opacity: 0.5 }, { opacity: 1, duration: 0.2 });
+        if (video.getAttribute("src") !== videoSrc) {
+          gsap.fromTo(video, { opacity: 0.5 }, { opacity: 1, duration: 0.2 });
         }
-        image.src = imgSrc;
+        video.src = videoSrc;
+        video.className = videoStyle;
         
         isHovering = true;
         const mouseEvent = e as MouseEvent;
