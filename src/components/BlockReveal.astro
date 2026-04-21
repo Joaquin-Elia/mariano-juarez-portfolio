@@ -1,15 +1,4 @@
 ---
-// interface Props {
-//   text?: string;
-//   blockColor?: string;
-//   duration?: number;
-//   delay?: number;
-//   stagger?: number;
-//   easing?: string;
-//   class?: string;
-//   as?: any;
-// }
-
 const {
   text = "",
   blockColor = "#000",
@@ -19,7 +8,7 @@ const {
   easing = "power2.inOut",
   class: className = "",
   as: Tag = "div",
-} = Astro.props;
+}= Astro.props;
 ---
 
 <Tag

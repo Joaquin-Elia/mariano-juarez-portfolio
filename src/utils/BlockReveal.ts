@@ -86,19 +86,19 @@ export class BlockReveal {
       wrapper.className = "block-reveal-wrapper";
       wrapper.style.position = "relative";
       wrapper.style.display = "inline-block";
-      wrapper.style.overflow = "hidden";
-      // Añadir padding lateral y vertical para evitar que se corten letras (itálicas o descenders)
-      wrapper.style.padding = "0.05em 0.1em";
-      wrapper.style.margin = "-0.05em -0.1em";
-      wrapper.style.verticalAlign = "middle";
+      // Removed overflow: hidden and padding/margin tweaks so text bleeds naturally without clipping or layout shifts.
+      // If we need the mask to slightly overshoot, we can scale it.
       
+
       const block = document.createElement("span");
       block.className = "block-reveal-mask";
       block.style.position = "absolute";
-      block.style.top = "0";
-      block.style.left = "0";
-      block.style.width = "100%";
-      block.style.height = "100%";
+      // Extend the mask's boundaries beyond the exact text box 
+      // to cover descenders and any CSS blur bleeding (e.g. blur-[6px])
+      block.style.top = "-0.15em";
+      block.style.bottom = "-0.2em";
+      block.style.left = "-0.1em";
+      block.style.right = "-0.1em";
       block.style.backgroundColor = this.options.blockColor;
       
       // 3. Initial State
@@ -108,7 +108,9 @@ export class BlockReveal {
       
       const textNode = document.createElement("span");
       textNode.className = "block-reveal-text";
-      textNode.style.opacity = "0";
+      // Use visibility hidden instead of opacity 0 to prevent the browser 
+      // from rendering the heavy blur effect at all during the expand phase
+      textNode.style.visibility = "hidden"; 
       textNode.style.display = "inline-block";
       textNode.textContent = lineText;
       
@@ -151,7 +153,7 @@ export class BlockReveal {
       });
       
       // Reveal Text behind the mask
-      lineTl.set(line.textNode, { opacity: 1 });
+      lineTl.set(line.textNode, { visibility: "visible" });
       
       // Retract (Uncover Text) sliding out to the right
       lineTl.set(line.block, { transformOrigin: "right" });

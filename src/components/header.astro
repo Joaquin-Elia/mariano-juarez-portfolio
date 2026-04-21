@@ -1,20 +1,15 @@
 ---
 import Marquee from "./marquee.astro";
-import BlockReveal from "./BlockReveal.astro";
 ---
 
 <header class="space-y-12 bg-yellow text-black">
   <Marquee />
-  <BlockReveal
-    as="h1"
+  <h1
     class="sm:px-3 lg:px-8 big-text sm:leading-[0.85] sr-only sm:not-sr-only sm:inline-block"
   >
     Mariano Juarez
-  </BlockReveal>
-  <BlockReveal
-    as="h1"
-    class="px-3 big-text -tracking-tighter leading-[0.85] sm:hidden"
-  >
+  </h1>
+  <h1 class="px-3 big-text -tracking-tighter leading-[0.85] sm:hidden">
     MJ
-  </BlockReveal>
+  </h1>
 </header>

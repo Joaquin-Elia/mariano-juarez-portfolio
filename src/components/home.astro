@@ -68,10 +68,16 @@ import BlockReveal from "./BlockReveal.astro";
   .links-home {
     @apply transition-all duration-300 hover:relative hover:z-10;
   }
-  .links-home.reveal-complete {
-    @apply lg:blur-[6px] lg:hover:blur-none;
+  .links-home .block-reveal-text {
+    @apply lg:blur-[6px] transition-all duration-300;
+  }
+  .links-home:hover .block-reveal-text {
+    @apply lg:blur-none;
   }
   .project-title-active {
-    @apply lg:blur-none! lg:relative lg:z-10;
+    @apply lg:relative lg:z-10;
+  }
+  .project-title-active .block-reveal-text {
+    @apply lg:blur-none;
   }
 </style>
