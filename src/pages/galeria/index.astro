@@ -1,15 +1,32 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import BlockReveal from "../../components/BlockReveal.astro";
 ---
 
 <Layout title="Gallery - Mariano Juarez">
-  <div
-    class="bg-black flex flex-col justify-center items-center h-screen text-9xl font-raster font-bold"
-  >
-    <a href="/">Back</a>
-    <BlockReveal as="h1" class="text-9xl" blockColor="var(--color-yellow)">
-      Gallery
-    </BlockReveal>
-  </div>
+  <section class="gallery">
+    <canvas></canvas>
+  </section>
 </Layout>
+
+<style>
+  .gallery {
+    position: relative;
+    user-select: none;
+    width: 100%;
+    height: 100svh;
+    overflow: hidden;
+    background-color: #fff;
+  }
+  .gallery canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* overflow: hidden; */
+  }
+</style>
+
+<script>
+  import "../../scripts/gallery.ts";
+</script>
