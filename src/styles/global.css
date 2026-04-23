@@ -3,8 +3,8 @@
 @font-face {
   font-family: "FKRasterRoman";
   src: url("/fonts/FKRasterRomanCompactTrial-Smooth.otf") format("opentype");
-  /* font-weight: 700; */
-  /* font-display: swap; */
+  /* font-weight: 800; */
+  font-display: block;
 }
 
 @font-face {
@@ -12,7 +12,7 @@
   src: url("/fonts/SpaceMono-Regular.ttf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -20,7 +20,7 @@
   src: url("/fonts/SpaceMono-Bold.ttf") format("opentype");
   font-weight: 700;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 @theme {

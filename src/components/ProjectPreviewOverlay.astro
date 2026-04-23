@@ -16,7 +16,6 @@
       muted
       loop
       playsinline
-      preload="metadata"
       class="w-full h-full object-cover"
     />
   </div>
@@ -38,6 +37,16 @@
       const items = document.querySelectorAll(".project-item");
       
       if (!overlay || !container || !video || items.length === 0) return;
+
+      // Preload videos
+      items.forEach((item) => {
+        const videoSrc = item.getAttribute("data-video");
+        if (videoSrc) {
+          const preloadVideo = document.createElement("video");
+          preloadVideo.src = videoSrc;
+          preloadVideo.preload = "auto";
+        }
+      });
 
       let targetX = 0;
       let targetY = 0;

@@ -42,9 +42,6 @@ const {
     });
   };
 
-  // Run on initial load
-  initBlockReveals();
-  
   // Re-run on every navigation/page swap via View Transitions
   document.addEventListener("astro:page-load", initBlockReveals);
 </script>
