@@ -97,9 +97,9 @@
 }
 
 ::view-transition-old(root) {
-  animation: 1.5s cubic-bezier(0.87, 0, 0.13, 1) both moveOut;
+  animation: 0.8s cubic-bezier(0.87, 0, 0.13, 1) both moveOut;
 }
 
 ::view-transition-new(root) {
-  animation: 1.5s cubic-bezier(0.87, 0, 0.13, 1) both moveIn;
+  animation: 0.8s cubic-bezier(0.87, 0, 0.13, 1) both moveIn;
 }
