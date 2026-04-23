@@ -1,13 +1,14 @@
 ---
 interface Props {
   name: string;
+  slug: string;
   imageSrc: string;
   videoSrc: string;
   videoStyle: string;
   wrapperClass?: string;
 }
 
-const { name, videoSrc, videoStyle, wrapperClass = "" } = Astro.props;
+const { name, slug, videoSrc, videoStyle, wrapperClass = "" } = Astro.props;
 ---
 
 <div
@@ -15,9 +16,11 @@ const { name, videoSrc, videoStyle, wrapperClass = "" } = Astro.props;
   data-video={videoSrc}
   video-style={videoStyle}
 >
-  <h3
-    class="project-title bg-yellow text-black font-space-mono-bold text-3xl lg:text-4xl uppercase px-1 leading-none transition-all duration-300 cursor-pointer block tracking-tighter group-hover:invert group-hover:z-10"
-  >
-    {name}
-  </h3>
+  <a href={`/proyectos/${slug}`}>
+    <h3
+      class="project-title bg-yellow text-shadow-none text-black font-space-mono-bold text-3xl lg:text-4xl uppercase px-1 leading-none transition-all duration-300 cursor-pointer block tracking-tighter hover:invert group-hover:z-10"
+    >
+      {name}
+    </h3>
+  </a>
 </div>

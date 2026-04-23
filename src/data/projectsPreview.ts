@@ -1,6 +1,7 @@
 const projectsPreview = [
   {
     name: "VIRUS 2000",
+    slug: "virus-2000",
     imageSrc: "/images/1.jpeg",
     videoSrc: "/videos/Virus-Previsualizacion.mp4",
     videoStyle: "max-w-96",
@@ -8,6 +9,7 @@ const projectsPreview = [
   },
   {
     name: "FLYEMIGRATES",
+    slug: "flyemigrates",
     imageSrc: "/images/2.jpeg",
     videoSrc: "/videos/Pre-Fly.mp4",
     videoStyle: "max-w-96",
@@ -15,6 +17,7 @@ const projectsPreview = [
   },
   {
     name: "TUMBANDANDO EL CLUB",
+    slug: "tumbandando-el-club",
     imageSrc: "/images/3.jpeg",
     videoSrc: "/videos/Previsualizacion.mp4",
     videoStyle: "max-w-120",
@@ -22,6 +25,7 @@ const projectsPreview = [
   },
   {
     name: "CERRO CATEDRAL",
+    slug: "cerro-catedral",
     imageSrc: "/images/4.jpeg",
     videoSrc: "/videos/pre-catedral.mp4",
     videoStyle: "max-w-130",
