@@ -1,0 +1,208 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import projects from "../../data/projects";
+import Marquee from "../../components/marquee.astro";
+
+export async function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+
+// Find next project index
+const currentIndex = projects.findIndex((p) => p.slug === project.slug);
+const nextProject = projects[(currentIndex + 1) % projects.length];
+---
+
+<Layout title={`${project.title} - Mariano Juarez`}>
+  <div class="project-page min-h-screen flex flex-col bg-white text-black">
+    <header
+      class="bg-yellow flex flex-col md:relative md:justify-center md:pt-4 overflow-hidden"
+    >
+      <div class="w-full flex items-center order-1 md:order-0">
+        <Marquee />
+      </div>
+      <div
+        class="px-3 lg:px-0 pt-2 md:pt-0 md:absolute md:bottom-0 md:flex md:items-center md:pointer-events-none order-2 md:order-0"
+      >
+        <a
+          href="/"
+          class="font-raster font-bold text-5xl md:text-6xl md:pointer-events-auto md:bg-yellow lg:px-8"
+        >
+          <span class="hidden md:block">Mariano Juarez</span>
+          <span class="md:hidden">MJ</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="grow px-3 lg:px-8 pt-6 md:pt-0" id="main-content">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-6 items-start relative">
+        <!-- Text Content -->
+        <aside
+          class="lg:col-span-5 2xl:col-span-4 lg:sticky lg:top-[50dvh] lg:-translate-y-1/2 flex flex-col justify-center font-space-mono"
+        >
+          <nav aria-label="Navegación de retorno">
+            <a
+              href="/"
+              class="group inline-flex items-center gap-2 font-space-mono-bold uppercase tracking-tighter"
+            >
+              <span class="text-5xl md:text-7xl" aria-hidden="true">←</span>
+              <span class="sr-only">Volver al inicio</span>
+            </a>
+          </nav>
+
+          <h1
+            class="font-space-mono-bold text-3xl md:text-5xl py-4 tracking-tight leading-none uppercase"
+          >
+            {project.title}
+          </h1>
+
+          <div class="bg-yellow">
+            <p class="text-sm 2xl:text-lg leading-snug text-justify">
+              {project.description}
+            </p>
+          </div>
+        </aside>
+
+        <!-- Media Gallery -->
+        <section
+          class="lg:col-span-7 2xl:col-span-8 grid gap-4 lg:gap-0 md:grid-cols-2 items-center relative"
+          aria-label="Galería de medios del proyecto"
+        >
+          {
+            project.media.map((item, index) => (
+              <figure class={`draggable-item relative group rounded-sm cursor-grab active:cursor-grabbing select-none touch-none ${index % 2 !== 0 ? 'mt-2 md:mt-6' : ''}`}>
+                {item.type === "video" ? (
+                  <video
+                    src={item.src}
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    class="w-full h-auto object-cover pointer-events-none"
+                  />
+                ) : (
+                  <img
+                    src={item.src}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    class="w-full h-auto object-cover pointer-events-none"
+                  />
+                )}
+                {item.caption && (
+                  <figcaption class="mt-4 font-space-mono text-sm uppercase tracking-widest opacity-50 p-2">
+                    {item.caption}
+                  </figcaption>
+                )}
+              </figure>
+            ))
+          }
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div
+        class="flex flex-col items-center md:items-end gap-8 px-4 py-8 md:px-8"
+      >
+        <a
+          href={`/proyectos/${nextProject.slug}`}
+          class="bg-yellow text-black px-8 py-4 md:px-12 md:py-6 font-space-mono-bold text-xl md:text-2xl uppercase hover:scale-105 transition-transform"
+        >
+          Siguiente proyecto →
+        </a>
+      </div>
+    </footer>
+    <!-- Footer / Next Project -->
+    <!-- <footer class="bg-black text-white py-24 px-3 lg:px-8 overflow-hidden relative">
+      <div class="max-w-7xl mx-auto relative z-10">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-12">
+          <div class="text-center md:text-left">
+            <span class="block font-space-mono text-yellow uppercase tracking-widest mb-4 opacity-70">
+              ¿Vemos más?
+            </span>
+            <a href={`/proyectos/${nextProject.slug}`} class="group block">
+              <h2 class="text-with-border-white text-6xl md:text-9xl transition-all group-hover:blur-[2px]">
+                {nextProject.title}
+              </h2>
+            </a>
+          </div>
+          
+          <div class="flex flex-col items-center md:items-end gap-8">
+            <a href={`/proyectos/${nextProject.slug}`} class="bg-yellow text-black px-12 py-6 font-space-mono-bold text-2xl uppercase hover:scale-105 transition-transform">
+              Siguiente →
+            </a>
+            <p class="font-space-mono text-sm opacity-50">Mariano Juarez © 2026</p>
+          </div>
+        </div>
+      </div>
+       -->
+    <!-- Decorative background text -->
+    <!-- <div class="absolute inset-0 flex items-center justify-center opacity-5 select-none pointer-events-none">
+        <span class="text-[30vw] font-raster whitespace-nowrap leading-none uppercase">
+          {nextProject.title}
+        </span>
+      </div>
+    </footer> -->
+  </div>
+</Layout>
+
+<script>
+  import "../../scripts/draggableProject.ts";
+</script>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .project-page {
+    position: relative;
+    cursor: default;
+    background-color: #fff;
+    overflow-x: clip;
+    z-index: 0;
+  }
+
+  .project-page::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("/images/noise.webp");
+    background-repeat: repeat;
+    /* opacity: 0.12; */
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .draggable-item {
+    transition:
+      transform 0.05s linear,
+      box-shadow 0.2s ease;
+    will-change: transform;
+  }
+
+  .draggable-item:active {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Custom scrollbar for a more premium feel */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-gray);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-black);
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #444;
+  }
+</style>
