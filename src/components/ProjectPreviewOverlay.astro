@@ -1,14 +1,15 @@
 ---
+
 ---
 
-<div id="project-preview-overlay" class="fixed inset-0 mt-10 pointer-events-none z-70 hidden lg:block overflow-hidden">
-  <div id="project-preview-container" class="absolute aspect-auto opacity-0 scale-90 overflow-hidden origin-bottom">
-    <!-- <img 
-      id="project-preview-image" 
-      src="" 
-      alt="Project Preview" 
-      class="w-full h-full object-cover"
-    /> -->
+<div
+  id="project-preview-overlay"
+  class="fixed inset-0 mt-10 pointer-events-none z-70 hidden lg:block overflow-hidden"
+>
+  <div
+    id="project-preview-container"
+    class="absolute aspect-auto opacity-0 scale-90 overflow-hidden origin-bottom"
+  >
     <video
       id="project-preview-video"
       src=""
@@ -16,8 +17,7 @@
       muted
       loop
       playsinline
-      class="w-full h-full object-cover"
-    />
+      class="w-full h-full object-cover"></video>
   </div>
 </div>
 
@@ -33,9 +33,11 @@
     mm.add("(min-width: 1024px)", () => {
       const overlay = document.getElementById("project-preview-overlay");
       const container = document.getElementById("project-preview-container");
-      const video = document.getElementById("project-preview-video") as HTMLVideoElement;
+      const video = document.getElementById(
+        "project-preview-video",
+      ) as HTMLVideoElement;
       const items = document.querySelectorAll(".project-item");
-      
+
       if (!overlay || !container || !video || items.length === 0) return;
 
       // Preload videos
@@ -56,21 +58,26 @@
       let isHovering = false;
 
       // Initial resting state
-      gsap.set(container, { xPercent: -50, yPercent: 8, opacity: 0, scale: 0.9 });
+      gsap.set(container, {
+        xPercent: -50,
+        yPercent: 8,
+        opacity: 0,
+        scale: 0.9,
+      });
 
       const updatePosition = () => {
         currentX += (targetX - currentX) * 0.15;
         currentY += (targetY - currentY) * 0.15;
-        
+
         gsap.set(container, { x: currentX, y: currentY });
-        
+
         if (isHovering) {
           rafId = requestAnimationFrame(updatePosition);
         } else {
           // If we stopped hovering, update one last frame then kill raf
           rafId = requestAnimationFrame(() => {
-             gsap.set(container, { x: currentX, y: currentY });
-             rafId = null;
+            gsap.set(container, { x: currentX, y: currentY });
+            rafId = null;
           });
         }
       };
@@ -84,22 +91,47 @@
         const target = e.currentTarget as HTMLElement;
         const videoSrc = target.getAttribute("data-video");
         const videoStyle = target.getAttribute("video-style");
+        const aspectRatio = target.getAttribute("data-aspect-ratio");
         if (!videoSrc || !videoStyle) return;
 
-        // Visual flash if changing source
-        if (video.getAttribute("src") !== videoSrc) {
-          gsap.fromTo(video, { opacity: 0.5 }, { opacity: 1, duration: 0.2 });
+        // Reset state
+        video.classList.remove("loaded");
+        video.style.aspectRatio = aspectRatio || ""; // Apply aspect ratio immediately if available
+
+        // Calculate poster (Cloudinary logic)
+        if (videoSrc.includes("res.cloudinary.com")) {
+          const posterSrc = videoSrc
+            .replace("/video/upload/", "/video/upload/f_auto,q_auto,w_20/")
+            .replace(/\.[^/.]+$/, ".jpg");
+          video.poster = posterSrc;
         }
+
         video.src = videoSrc;
-        video.className = videoStyle;
-        
+        video.className = videoStyle + " preview-video";
+
+        // loadedmetadata: ya sabemos las dimensiones reales → aplicar aspect-ratio al placeholder
+        const handleMetadata = () => {
+          if (video.videoWidth && video.videoHeight) {
+            video.style.aspectRatio = `${video.videoWidth} / ${video.videoHeight}`;
+          }
+          video.removeEventListener("loadedmetadata", handleMetadata);
+        };
+        video.addEventListener("loadedmetadata", handleMetadata);
+
+        const handleCanPlay = () => {
+          video.classList.add("loaded");
+          video.style.aspectRatio = ""; // Dejar que el browser use las dimensiones reales
+          video.removeEventListener("canplay", handleCanPlay);
+        };
+        video.addEventListener("canplay", handleCanPlay);
+
         isHovering = true;
         const mouseEvent = e as MouseEvent;
-        
+
         // Tracking logic
         targetX = mouseEvent.clientX;
         targetY = mouseEvent.clientY;
-        
+
         if (currentX === 0 && currentY === 0) {
           currentX = targetX;
           currentY = targetY;
@@ -117,13 +149,13 @@
           scale: 1,
           duration: 0.4, // fast show like in user config
           ease: "power2.out",
-          overwrite: "auto"
+          overwrite: "auto",
         });
       };
 
       const onMouseLeave = () => {
         isHovering = false;
-        
+
         // Hide image
         gsap.to(container, {
           opacity: 0,
@@ -136,8 +168,11 @@
               document.removeEventListener("mousemove", handleMouseMove);
               currentX = 0;
               currentY = 0;
+              video.src = ""; // Clear src to stop bandwidth
+              video.poster = "";
+              video.classList.remove("loaded");
             }
-          }
+          },
         });
       };
 
@@ -162,3 +197,18 @@
   // Safe cleanup and re-evaluation upon Astro view transition navigation
   document.addEventListener("astro:page-load", initPreview);
 </script>
+
+<style is:global>
+  .preview-video {
+    filter: blur(10rem);
+    transform: scale(1.05);
+    min-width: 20rem;
+    transition:
+      filter 0.5s ease-out,
+      transform 0.5s ease-out;
+  }
+  .preview-video.loaded {
+    filter: blur(0);
+    transform: scale(1);
+  }
+</style>

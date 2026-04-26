@@ -1,24 +1,31 @@
 ---
+import { cldVideo } from '../utils/cloudinary';
+
 interface Props {
   name: string;
   slug: string;
-  imageSrc: string;
+  // imageSrc: string;
   videoSrc: string;
   videoStyle: string;
   wrapperClass?: string;
+  aspectRatio?: string;
 }
 
-const { name, slug, videoSrc, videoStyle, wrapperClass = "" } = Astro.props;
+const { name, slug, videoSrc, videoStyle, wrapperClass = "", aspectRatio = "9/16" } = Astro.props;
+
+const isExternal = videoSrc.startsWith("http") || videoSrc.startsWith("/");
+const fullVideoSrc = isExternal ? videoSrc : cldVideo(videoSrc, "f_auto,q_auto");
 ---
 
 <div
   class={`project-item opacity-0 w-max relative flex items-center group ${wrapperClass}`}
-  data-video={videoSrc}
+  data-video={fullVideoSrc}
   video-style={videoStyle}
+  data-aspect-ratio={aspectRatio}
 >
   <a href={`/proyectos/${slug}`}>
     <h3
-      class="project-title bg-yellow text-shadow-none text-black font-space-mono-bold text-3xl lg:text-4xl uppercase px-1 leading-none transition-all duration-300 cursor-pointer block tracking-tighter hover:invert group-hover:z-10"
+      class="project-title bg-yellow text-shadow-none text-black font-space-mono-bold text-3xl lg:text-4xl uppercase px-1 leading-none transition-all duration-300 cursor-pointer block tracking-tighter hover:text-yellow hover:bg-black group-hover:z-10"
     >
       {name}
     </h3>
