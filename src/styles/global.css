@@ -3,7 +3,6 @@
 @font-face {
   font-family: "FKRasterRoman";
   src: url("/fonts/FKRasterRomanCompactTrial-Smooth.otf") format("opentype");
-  /* font-weight: 800; */
   font-display: block;
 }
 
@@ -18,7 +17,7 @@
 @font-face {
   font-family: "SpaceMonoBold";
   src: url("/fonts/SpaceMono-Bold.ttf") format("opentype");
-  font-weight: 700;
+  font-weight: 800;
   font-style: normal;
   font-display: block;
 }
@@ -33,33 +32,79 @@
   --font-space-mono-bold: "SpaceMonoBold";
 }
 
-.text-with-border {
+.text-with-border,
+.big-text {
   font-family: var(--font-raster);
-  color: var(--color-black);
-  font-weight: 700;
+  font-weight: 800;
+  font-size: clamp(5.3rem, 8.8vw, 11rem);
+  letter-spacing: -2px;
+}
+
+.name-style {
+  color: var(--color-yellow);
   text-shadow:
+    -4px -4px 0 var(--color-black),
+    4px -4px 0 var(--color-black),
+    -4px 4px 0 var(--color-black),
+    4px 4px 0 var(--color-black);
+}
+.name-style-small {
+  text-shadow:
+    -2.5px -2.5px 0 var(--color-black),
+    2.5px -2.5px 0 var(--color-black),
+    -2.5px 2.5px 0 var(--color-black),
+    2.5px 2.5px 0 var(--color-black);
+}
+
+.text-with-border {
+  color: var(--color-black);
+  text-shadow:
+    1px 0 0 var(--color-black),
+    -1px 0 0 var(--color-black),
+    0 1px 0 var(--color-black),
+    0 -1px 0 var(--color-black),
     -4px -4px 0 var(--color-yellow),
     4px -4px 0 var(--color-yellow),
     -4px 4px 0 var(--color-yellow),
-    4px 4px 0 var(--color-yellow);
-}
-
-.big-text {
-  font-family: var(--font-raster);
-  font-weight: 700;
-  font-size: clamp(5.3rem, 8.8vw, 10rem);
+    4px 4px 0 var(--color-yellow),
+    4px 0 0 var(--color-yellow),
+    -4px 0 0 var(--color-yellow),
+    0 4px 0 var(--color-yellow),
+    0 -4px 0 var(--color-yellow);
 }
 
 @media (min-width: 2000px) {
-  .big-text {
-    font-size: 9.5vw;
+  .text-with-border,
+  .name-style {
+    font-size: 10vw;
+  }
+  .name-style {
+    text-shadow:
+      -6px -6px 0 var(--color-black),
+      6px -6px 0 var(--color-black),
+      -6px 6px 0 var(--color-black),
+      6px 6px 0 var(--color-black);
   }
   .text-with-border {
     text-shadow:
-      -5px -5px 0 var(--color-yellow),
-      5px -5px 0 var(--color-yellow),
-      -5px 5px 0 var(--color-yellow),
-      5px 5px 0 var(--color-yellow);
+      1.5px 0 0 var(--color-black),
+      -1.5px 0 0 var(--color-black),
+      0 1.5px 0 var(--color-black),
+      0 -1.5px 0 var(--color-black),
+      -6px -6px 0 var(--color-yellow),
+      6px -6px 0 var(--color-yellow),
+      -6px 6px 0 var(--color-yellow),
+      6px 6px 0 var(--color-yellow),
+      6px 0 0 var(--color-yellow),
+      -6px 0 0 var(--color-yellow),
+      0 6px 0 var(--color-yellow),
+      0 -6px 0 var(--color-yellow);
+  }
+}
+
+@media (min-width: 700px) {
+  .big-text {
+    font-size: clamp(4rem, 8.8vw, 9rem);
   }
 }
 
@@ -68,11 +113,20 @@
     font-size: 4.6rem;
   }
   .text-with-border {
+    letter-spacing: -1.5px;
     text-shadow:
+      0.5px 0 0 var(--color-black),
+      -0.5px 0 0 var(--color-black),
+      0 0.5px 0 var(--color-black),
+      0 -0.5px 0 var(--color-black),
       -2px -2px 0 var(--color-yellow),
       2px -2px 0 var(--color-yellow),
       -2px 2px 0 var(--color-yellow),
-      2px 2px 0 var(--color-yellow);
+      2px 2px 0 var(--color-yellow),
+      2px 0 0 var(--color-yellow),
+      -2px 0 0 var(--color-yellow),
+      0 2px 0 var(--color-yellow),
+      0 -2px 0 var(--color-yellow);
   }
 }
 
