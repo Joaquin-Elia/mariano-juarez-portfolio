@@ -1,0 +1,99 @@
+---
+import { cldVideo, cldPoster } from "../utils/cloudinary";
+
+interface Props {
+  src: string;
+}
+
+const { src } = Astro.props;
+
+// Si el src ya es una URL completa, la usamos, si no generamos con Cloudinary
+const isExternal = src.startsWith('http') || src.startsWith('/');
+const videoSrc = isExternal ? src : cldVideo(src, "f_auto,q_auto");
+const placeholder = isExternal ? '' : cldPoster(src, "f_auto,q_auto,w_20");
+---
+
+<div class="video-container">
+  <video
+    src={videoSrc}
+    poster={placeholder && placeholder}
+    autoplay
+    muted
+    loop
+    playsinline
+    class="responsive-video aspect-auto"
+  ></video>
+</div>
+
+<style is:global>
+  .video-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: transparent;
+  }
+
+  .responsive-video {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* aspect-ratio se aplica dinámicamente via JS desde los metadatos del video */
+    background-size: cover;
+    background-position: center;
+    filter: blur(10rem);
+    transform: scale(1.05);
+    transition:
+      filter 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.5s ease;
+    opacity: 0;
+  }
+
+  .responsive-video.loaded {
+    aspect-ratio: auto !important;
+    filter: blur(0);
+    transform: scale(1);
+    opacity: 1;
+  }
+</style>
+
+<script>
+  function setupResponsiveVideos() {
+    const videos = document.querySelectorAll(".responsive-video");
+
+    videos.forEach((el) => {
+      const video = el as HTMLVideoElement;
+
+      const markAsLoaded = () => {
+        video.classList.add("loaded");
+        // Quitar el aspect-ratio fijado para que el browser use las dimensiones reales
+        video.style.aspectRatio = "";
+        setTimeout(() => {
+          video.style.backgroundImage = "none";
+        }, 800);
+      };
+
+      // loadedmetadata llega antes que canplay: ya sabemos ancho y alto reales
+      const applyAspectRatio = () => {
+        if (video.videoWidth && video.videoHeight) {
+          video.style.aspectRatio = `${video.videoWidth} / ${video.videoHeight}`;
+        }
+      };
+
+      if (video.readyState >= 1) {
+        // Metadatos ya disponibles (ej: caché)
+        applyAspectRatio();
+      } else {
+        video.addEventListener("loadedmetadata", applyAspectRatio, { once: true });
+      }
+
+      if (video.readyState >= 3) {
+        markAsLoaded();
+      } else {
+        video.addEventListener("canplay", markAsLoaded, { once: true });
+      }
+    });
+  }
+
+  document.addEventListener("astro:page-load", setupResponsiveVideos);
+</script>
