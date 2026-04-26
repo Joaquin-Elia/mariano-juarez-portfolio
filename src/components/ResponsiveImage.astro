@@ -1,0 +1,89 @@
+---
+import { cld } from "../utils/cloudinary";
+
+interface Props {
+  src: string;
+  alt?: string;
+  sizes?: string;
+}
+
+const {
+  src,
+  alt = "",
+  sizes = "(max-width: 768px) 100vw, 1200px",
+} = Astro.props;
+
+// tamaños que va a poder elegir el navegador
+const widths = [480, 1280, 1920];
+
+// srcset dinámico
+const srcset = widths
+  .map((w) => `${cld(src, `f_auto,q_auto,w_${w}`)} ${w}w`)
+  .join(", ");
+
+// fallback
+const fallback = cld(src, "f_auto,q_auto,w_800");
+
+// placeholder blur
+const placeholder = cld(src, "f_auto,q_auto,w_20");
+---
+
+<img
+  src={fallback}
+  srcset={srcset}
+  sizes={sizes}
+  alt={alt}
+  loading="lazy"
+  decoding="async"
+  style={`background-image: url('${placeholder}')`}
+  class="responsive-img aspect-auto"
+/>
+
+<style is:global>
+  .responsive-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    background-size: cover;
+    background-position: center;
+    aspect-ratio: 1/1;
+    filter: blur(1rem);
+    transform: scale(1.05);
+    transition:
+      filter 0.4s ease,
+      transform 0.4s ease,
+      opacity 0.4s ease;
+  }
+
+  .responsive-img.loaded {
+    aspect-ratio: auto;
+    filter: blur(0);
+    transform: scale(1);
+  }
+</style>
+
+<script>
+  function setupResponsiveImages() {
+    const images = document.querySelectorAll(".responsive-img");
+
+    images.forEach((el) => {
+      const img = el as HTMLImageElement;
+
+      const markAsLoaded = () => {
+        img.classList.add("loaded");
+        img.style.backgroundImage = "none";
+      };
+
+      // Si ya cargó (cache), ejecutar inmediatamente
+      if (img.complete && img.naturalWidth > 0) {
+        markAsLoaded();
+      } else {
+        // Si no, esperar al evento load
+        img.addEventListener("load", markAsLoaded, { once: true });
+      }
+    });
+  }
+
+  // Ejecutar en cada carga de página (soporte para View Transitions)
+  document.addEventListener("astro:page-load", setupResponsiveImages);
+</script>
