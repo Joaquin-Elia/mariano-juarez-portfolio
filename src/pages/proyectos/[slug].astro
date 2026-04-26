@@ -2,6 +2,9 @@
 import Layout from "../../layouts/Layout.astro";
 import projects from "../../data/projects";
 import Marquee from "../../components/marquee.astro";
+import ResponsiveImage from "../../components/ResponsiveImage.astro";
+
+import ResponsiveVideo from "../../components/ResponsiveVideo.astro";
 
 export async function getStaticPaths() {
   return projects.map((project) => ({
@@ -23,7 +26,7 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
       class="bg-yellow flex flex-col md:relative md:justify-center md:pt-4 overflow-hidden"
     >
       <div class="w-full flex items-center order-1 md:order-0">
-        <Marquee />
+        <Marquee color="bg-yellow text-black" />
       </div>
       <div
         class="px-3 lg:px-0 pt-2 md:pt-0 md:absolute md:bottom-0 md:flex md:items-center md:pointer-events-none order-2 md:order-0"
@@ -32,17 +35,24 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
           href="/"
           class="font-raster font-bold text-5xl md:text-6xl md:pointer-events-auto md:bg-yellow lg:px-8"
         >
-          <span class="hidden md:block">Mariano Juarez</span>
-          <span class="md:hidden">MJ</span>
+          <span
+            class="name-style name-style-small leading-{0.95] hidden md:block"
+            >Mariano Juarez</span
+          >
+          <span class="name-style name-style-small leading-{0.95] md:hidden"
+            >MJ</span
+          >
         </a>
       </div>
     </header>
 
     <main class="grow px-3 lg:px-8 pt-6 md:pt-0" id="main-content">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-6 items-start relative">
+      <div
+        class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-2 items-start relative"
+      >
         <!-- Text Content -->
         <aside
-          class="lg:col-span-5 2xl:col-span-4 lg:sticky lg:top-[50dvh] lg:-translate-y-1/2 flex flex-col justify-center font-space-mono"
+          class="lg:col-span-4 2xl:col-span-3 lg:sticky lg:top-[50dvh] lg:-translate-y-1/2 flex flex-col justify-center font-space-mono"
         >
           <nav aria-label="Navegación de retorno">
             <a
@@ -60,38 +70,29 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
             {project.title}
           </h1>
 
-          <div class="bg-yellow">
-            <p class="text-sm 2xl:text-lg leading-snug text-justify">
+          <p
+            class="font-space-mono-bold text-sm lg:text-base text-justify uppercase"
+          >
+            <span class="bg-yellow text-black box-decoration-clone">
               {project.description}
-            </p>
-          </div>
+            </span>
+          </p>
         </aside>
 
         <!-- Media Gallery -->
         <section
-          class="lg:col-span-7 2xl:col-span-8 grid gap-4 lg:gap-0 md:grid-cols-2 items-center relative"
+          class="lg:col-span-8 2xl:col-span-9 grid gap-4 lg:gap-0 md:grid-cols-2 relative lg:mt-6"
           aria-label="Galería de medios del proyecto"
         >
           {
             project.media.map((item, index) => (
-              <figure class={`draggable-item relative group rounded-sm cursor-grab active:cursor-grabbing select-none touch-none ${index % 2 !== 0 ? 'mt-2 md:mt-6' : ''}`}>
+              <figure
+                class={`draggable-item relative group rounded-sm md:cursor-grab md:active:cursor-grabbing select-none md:touch-none max-w-5xl mx-auto ${item.fullWidth ? "md:col-span-2 w-full" + (item.margin ? " md:my-10" : "md:-my-16") : "lg:w-[35vw] 2xl:w-[40vw]" + (!item.fullWidth && index % 2 !== 0 ? "mt-10 md:mt-12" : "")}`}
+              >
                 {item.type === "video" ? (
-                  <video
-                    src={item.src}
-                    autoplay
-                    muted
-                    loop
-                    playsinline
-                    class="w-full h-auto object-cover pointer-events-none"
-                  />
+                  <ResponsiveVideo src={item.src} />
                 ) : (
-                  <img
-                    src={item.src}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    class="w-full h-auto object-cover pointer-events-none"
-                  />
+                  <ResponsiveImage src={item.src} alt={item.caption} />
                 )}
                 {item.caption && (
                   <figcaption class="mt-4 font-space-mono text-sm uppercase tracking-widest opacity-50 p-2">
@@ -105,13 +106,21 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
       </div>
     </main>
 
-    <footer>
-      <div
-        class="flex flex-col items-center md:items-end gap-8 px-4 py-8 md:px-8"
+    <footer
+      class="md:sticky md:bottom-4 md:left-0 flex flex-col md:flex-row items-center gap-8 md:items-end justify-between w-full px-3 lg:px-8 z-50 md:gap-0 pointer-events-none my-10"
+    >
+      <p
+        class="order-2 md:order-0 max-w-xs font-space-mono-bold text-[10px] sm:text-xs pointer-events-auto text-justify"
       >
+        <span class="bg-yellow text-black px-1 uppercase box-decoration-clone"
+          >@MarianoJuarez.2026. All rights reserved. By using this site, you
+          agree to our privacy policy and the processing of personal data.</span
+        >
+      </p>
+      <div class="pointer-events-auto">
         <a
           href={`/proyectos/${nextProject.slug}`}
-          class="bg-yellow text-black px-8 py-4 md:px-12 md:py-6 font-space-mono-bold text-xl md:text-2xl uppercase hover:scale-105 transition-transform"
+          class="bg-yellow text-black px-1 font-space-mono-bold text-2xl uppercase hover:blur-[1.5px] transition-all duration-300 box-decoration-clone"
         >
           Siguiente proyecto →
         </a>
@@ -181,14 +190,12 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
   }
 
   .draggable-item {
-    transition:
-      transform 0.05s linear,
-      box-shadow 0.2s ease;
+    transition: transform 0.05s linear;
     will-change: transform;
   }
 
   .draggable-item:active {
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    /* box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); */
   }
 
   /* Custom scrollbar for a more premium feel */

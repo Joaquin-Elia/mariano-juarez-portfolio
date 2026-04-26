@@ -1,4 +1,5 @@
 export const initDraggable = () => {
+  if (window.innerWidth < 768) return;
   const items = document.querySelectorAll(".draggable-item");
   let maxZIndex = 10;
 
