@@ -5,6 +5,7 @@ import Marquee from "../../components/marquee.astro";
 import ResponsiveImage from "../../components/ResponsiveImage.astro";
 
 import ResponsiveVideo from "../../components/ResponsiveVideo.astro";
+import BackBtn from "../../components/BackBtn.astro";
 
 export async function getStaticPaths() {
   return projects.map((project) => ({
@@ -29,7 +30,7 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
         <Marquee color="bg-yellow text-black" />
       </div>
       <div
-        class="px-3 lg:px-0 pt-2 md:pt-0 md:absolute md:bottom-0 md:flex md:items-center md:pointer-events-none order-2 md:order-0"
+        class="px-3 lg:px-0 pt-2 md:pt-0 md:absolute md:bottom-0 z-10 md:flex md:items-center md:pointer-events-none order-2 md:order-0"
       >
         <a
           href="/"
@@ -52,20 +53,12 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
       >
         <!-- Text Content -->
         <aside
-          class="lg:col-span-4 2xl:col-span-3 lg:sticky lg:top-[50dvh] lg:-translate-y-1/2 flex flex-col justify-center font-space-mono"
+          class="space-y-4 lg:col-span-4 2xl:col-span-3 lg:sticky lg:top-[50dvh] lg:-translate-y-1/2 flex flex-col justify-center font-space-mono"
         >
-          <nav aria-label="Navegación de retorno">
-            <a
-              href="/"
-              class="group inline-flex items-center gap-2 font-space-mono-bold uppercase tracking-tighter"
-            >
-              <span class="text-5xl md:text-7xl" aria-hidden="true">←</span>
-              <span class="sr-only">Volver al inicio</span>
-            </a>
-          </nav>
+          <BackBtn />
 
           <h1
-            class="font-space-mono-bold text-3xl md:text-5xl py-4 tracking-tight leading-none uppercase"
+            class="font-space-mono-bold text-3xl md:text-5xl tracking-tight leading-none uppercase"
           >
             {project.title}
           </h1>

@@ -1,11 +1,9 @@
 ---
 interface Props {
-    color?: string;
+  color?: string;
 }
 
-const {
-    color = "bg-black text-yellow",
-} = Astro.props;
+const { color = "bg-black text-yellow" } = Astro.props;
 ---
 
 <section
@@ -13,27 +11,34 @@ const {
 >
   <div class="marquee-wrapper">
     <div class="marquee-content">
-      <div class="marquee-group">
-        <div class="marquee-item">
-          <span>trabajemos juntos</span>
-          <span class="mx-2">→</span>
-          <span>mjrzfesta@gmail.com</span>
-        </div>
-        <div class="marquee-item">
-          <span class="mx-2">→</span>
-          <span>Disponible full time o freelance</span>
-        </div>
+      <div class="marquee-item">
+        <span>trabajemos juntos</span>
+        <span class="mx-2">→</span>
+        <span>mjrzfesta@gmail.com</span>
       </div>
-      <div class="marquee-group" aria-hidden="true">
-        <div class="marquee-item">
-          <span>trabajemos juntos</span>
-          <span class="mx-2">→</span>
-          <span>mjrzfesta@gmail.com</span>
-        </div>
-        <div class="marquee-item">
-          <span class="mx-2">→</span>
-          <span>Disponible full time o freelance</span>
-        </div>
+      <div class="marquee-item">
+        <span class="mx-2">→</span>
+        <span>Disponible full time o freelance</span>
+      </div>
+      <div class="marquee-item">
+        <span class="mx-2">→</span>
+        <span>trabajemos juntos</span>
+        <span class="mx-2">→</span>
+        <span>mjrzfesta@gmail.com</span>
+      </div>
+      <div class="marquee-item">
+        <span class="mx-2">→</span>
+        <span>Disponible full time o freelance</span>
+      </div>
+      <div class="marquee-item">
+        <span class="mx-2">→</span>
+        <span>trabajemos juntos</span>
+        <span class="mx-2">→</span>
+        <span>mjrzfesta@gmail.com</span>
+      </div>
+      <div class="marquee-item">
+        <span class="mx-2">→</span>
+        <span>Disponible full time o freelance</span>
       </div>
     </div>
   </div>
@@ -48,25 +53,17 @@ const {
   @reference "../styles/global.css";
   .marquee-wrapper {
     display: flex;
+    width: max-content;
   }
 
   .marquee-content {
     display: flex;
-    flex-shrink: 0;
-    width: max-content;
-    animation: marquee 30s linear infinite;
-  }
-
-  .marquee-group {
-    display: flex;
-    flex-shrink: 0;
+    animation: marquee 40s linear infinite;
     @apply gap-14 md:gap-28 items-center;
-    @apply pr-14 md:pr-28;
   }
 
   .marquee-item {
     display: flex;
-    flex-shrink: 0;
     align-items: center;
     text-transform: uppercase;
     @apply text-xl lg:text-2xl 2xl:text-3xl lg:tracking-tight  2xl:tracking-tighter;
@@ -77,7 +74,7 @@ const {
       transform: translateX(0);
     }
     100% {
-      transform: translateX(-50%);
+      transform: translateX(-33.333%);
     }
   }
 </style>

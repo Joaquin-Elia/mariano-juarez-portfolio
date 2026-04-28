@@ -1,0 +1,43 @@
+---
+interface Props {
+  label?: string;
+  className?: string;
+}
+
+const { label = "Volver", className = "" } = Astro.props;
+---
+
+<nav aria-label="Navegación de retorno">
+  <button
+    id="back-btn"
+    type="button"
+    class={`cursor-pointer text-black inline-flex items-center gap-2 font-space-mono-bold uppercase tracking-tighter ${className}`}
+    aria-label={label}
+  >
+    <span class="text-5xl leading-none md:text-7xl">←</span>
+    <span class="sr-only">{label}</span>
+  </button>
+</nav>
+
+<script>
+  import { navigate } from "astro:transitions/client";
+
+  const initBackBtn = () => {
+    const btn = document.getElementById("back-btn");
+
+    if (btn) {
+      btn.addEventListener("click", () => {
+        const hasHistory = document.referrer && document.referrer.startsWith(window.location.origin);
+        
+        if (hasHistory) {
+          history.back();
+        } else {
+          navigate("/");
+        }
+      });
+    }
+  };
+
+  initBackBtn();
+  document.addEventListener("astro:page-load", initBackBtn);
+</script>

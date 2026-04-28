@@ -68,7 +68,7 @@ export const initGallery = () => {
   scene.background = new THREE.Color(0xf4f4f4);
 
   camera = new THREE.PerspectiveCamera(
-    40,
+    35,
     window.innerWidth / window.innerHeight,
     0.1,
     100,
