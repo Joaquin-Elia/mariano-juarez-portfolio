@@ -10,11 +10,11 @@ interface Props {
 const {
   src,
   alt = "",
-  sizes = "(max-width: 768px) 100vw, 1200px",
+  sizes = "(max-width: 768px) 50vw, 1200px",
 } = Astro.props;
 
 // tamaños que va a poder elegir el navegador
-const widths = [480, 1280, 1920];
+const widths = [480, 768, 1280, 1920];
 
 // srcset dinámico
 const srcset = widths
