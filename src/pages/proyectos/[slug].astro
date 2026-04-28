@@ -58,13 +58,13 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
           <BackBtn />
 
           <h1
-            class="font-space-mono-bold text-3xl md:text-5xl tracking-tight leading-none uppercase"
+            class="font-space-mono-bold text-3xl md:text-4xl 2xl:text-5xl tracking-tight leading-none uppercase"
           >
             {project.title}
           </h1>
 
           <p
-            class="font-space-mono-bold text-sm lg:text-base text-justify uppercase"
+            class="inline-block font-space-mono text-sm leading-tight lg:text-base text-justify uppercase"
           >
             <span class="bg-yellow text-black box-decoration-clone">
               {project.description}
@@ -110,14 +110,14 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
           agree to our privacy policy and the processing of personal data.</span
         >
       </p>
-      <div class="pointer-events-auto">
-        <a
-          href={`/proyectos/${nextProject.slug}`}
-          class="bg-yellow text-black px-1 font-space-mono-bold text-2xl uppercase hover:blur-[1.5px] transition-all duration-300 box-decoration-clone"
+      <a
+        href={`/proyectos/${nextProject.slug}`}
+        class="p-1.5 pointer-events-auto"
+      >
+        <span class="inline-block bg-yellow text-black px-0.5 uppercase box-decoration-clone font-space-mono-bold text-2xl leading-none hover:blur-[1.5px] transition-all duration-300"
+          >Siguiente proyecto →</span
         >
-          Siguiente proyecto →
-        </a>
-      </div>
+      </a>
     </footer>
     <!-- Footer / Next Project -->
     <!-- <footer class="bg-black text-white py-24 px-3 lg:px-8 overflow-hidden relative">

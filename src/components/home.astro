@@ -7,7 +7,7 @@ import BlockReveal from "./BlockReveal.astro";
 
 <section class="min-h-dvh overflow-x-hidden relative">
   <Header />
-  <main>
+  <main class="">
     <nav
       class="big-text px-3 lg:px-8 py-3 md:py-6 text-with-border leading-snug sm:leading-none"
     >
@@ -22,7 +22,7 @@ import BlockReveal from "./BlockReveal.astro";
               class="links-home"
               blockColor="var(--color-yellow)"
             >
-              Galería
+              Galeria
             </BlockReveal>
           </a>
         </li>
@@ -50,14 +50,17 @@ import BlockReveal from "./BlockReveal.astro";
         </li>
       </ul>
     </nav>
-    <div class="backdrop-blur-sm absolute -z-10 inset-0"></div>
+    <div
+      class="backdrop-blur-[6px] absolute -z-10 inset-0 select-none pointer-events-none"
+    >
+    </div>
     <video
       src="/videos/cloudsBg.mp4"
       autoplay
       muted
       loop
       playsinline
-      class="h-full w-full object-cover object-bottom absolute inset-0 -z-20"
+      class="h-full w-full object-cover object-bottom absolute inset-0 -z-20 select-none pointer-events-none"
     ></video>
   </main>
   <Footer />

@@ -14,7 +14,7 @@ const {
 } = Astro.props;
 
 // tamaños que va a poder elegir el navegador
-const widths = [480, 768, 1280, 1920];
+const widths = [768, 1280, 1920];
 
 // srcset dinámico
 const srcset = widths
@@ -56,7 +56,7 @@ const placeholder = cld(src, "f_auto,q_auto,w_20");
   }
 
   .responsive-img.loaded {
-    aspect-ratio: auto;
+    aspect-ratio: inherit;
     filter: blur(0);
     transform: scale(1);
   }
