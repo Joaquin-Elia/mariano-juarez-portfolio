@@ -21,12 +21,11 @@ const projects: Project[] = [
     description:
       "Proyecto experimental que plantea un nuevo disco de Virus situado en los años 2000. A partir de esta premisa, se desarrolla un lenguaje visual inspirado en el futurismo Y2K, combinando estética retro y digital con tipografías sintéticas, brillos y elementos tecnológicos. La propuesta construye una identidad contemporánea donde lo analógico y lo digital conviven en una misma narrativa, integrando inteligencia artificial como recurso en la generación de imágenes.",
     media: [
-      // { type: 'video', src: '/videos/Virus-Previsualizacion.mp4' },
       { type: "image", src: "Tapa-1_wj4pby" },
-      { type: "image", src: "Insert-A_lki6rg" },
       { type: "image", src: "Vinilo-lado-b_y8ikuh" },
       { type: "image", src: "Vinilo-lado-a_rxgnc7" },
       { type: "image", src: "Inside_zcoqwm", fullWidth: true },
+      { type: "image", src: "insert-a_lki6rg_fee6ef" },
       { type: "image", src: "Insert-B_lzriqk" },
       { type: "image", src: "Contratapa-Coverplastico_vrqv7v" },
     ],

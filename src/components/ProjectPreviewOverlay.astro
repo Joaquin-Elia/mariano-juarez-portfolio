@@ -235,14 +235,18 @@
 <style is:global>
   .preview-video {
     filter: blur(10rem);
-    transform: scale(1.05);
+    -webkit-filter: blur(10rem);
+    transform: scale(1.05) translateZ(0);
+    will-change: filter, transform;
     min-width: 20rem;
     transition:
       filter 0.5s ease-out,
+      -webkit-filter 0.5s ease-out,
       transform 0.5s ease-out;
   }
   .preview-video.loaded {
     filter: blur(0);
-    transform: scale(1);
+    -webkit-filter: blur(0);
+    transform: scale(1) translateZ(0);
   }
 </style>
