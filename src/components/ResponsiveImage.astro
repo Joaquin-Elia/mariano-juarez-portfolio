@@ -18,14 +18,14 @@ const widths = [768, 1280, 1920];
 
 // srcset dinámico
 const srcset = widths
-  .map((w) => `${cld(src, `f_auto,q_auto,w_${w}`)} ${w}w`)
+  .map((w) => `${cld(src, `f_auto:good,q_auto,w_${w}`)} ${w}w`)
   .join(", ");
 
 // fallback
-const fallback = cld(src, "f_auto,q_auto,w_800");
+const fallback = cld(src, "f_auto:good,q_auto,w_800");
 
 // placeholder blur
-const placeholder = cld(src, "f_auto,q_auto,w_20");
+const placeholder = cld(src, "f_auto:good,q_auto,w_20");
 ---
 
 <img
