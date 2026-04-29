@@ -161,10 +161,13 @@
 
 @media (min-width: 2000px) {
   .text-with-border,
-  .name-style {
-    font-size: 10vw;
+  .name-style{
+    font-size: 8vw;
   }
-  .name-style {
+ .name-style-small {
+  font-size: 4rem;
+ }
+  /* .name-style {
     text-shadow:
       -6px -6px 0 var(--color-black),
       6px -6px 0 var(--color-black),
@@ -185,5 +188,5 @@
       -6px 0 0 var(--color-yellow),
       0 6px 0 var(--color-yellow),
       0 -6px 0 var(--color-yellow);
-  }
+  } */
 }

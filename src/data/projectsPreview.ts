@@ -29,7 +29,7 @@ const projectsPreview = [
     videoSrc: "pre-catedral_ikqc31",
     videoStyle: "max-w-130",
     wrapperClass: "lg:-mt-0.5 lg:ml-64",
-    aspectRatio: "16/9",
+    aspectRatio: "8/3",
   },
 ];
 

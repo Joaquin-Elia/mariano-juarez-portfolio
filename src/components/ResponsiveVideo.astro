@@ -8,9 +8,9 @@ interface Props {
 const { src } = Astro.props;
 
 // Si el src ya es una URL completa, la usamos, si no generamos con Cloudinary
-const isExternal = src.startsWith('http') || src.startsWith('/');
+const isExternal = src.startsWith("http") || src.startsWith("/");
 const videoSrc = isExternal ? src : cldVideo(src, "f_auto,q_auto");
-const placeholder = isExternal ? '' : cldPoster(src, "f_auto,q_auto,w_20");
+const placeholder = isExternal ? "" : cldPoster(src, "f_auto,q_auto,w_20");
 ---
 
 <div class="video-container">
@@ -21,8 +21,7 @@ const placeholder = isExternal ? '' : cldPoster(src, "f_auto,q_auto,w_20");
     muted
     loop
     playsinline
-    class="responsive-video aspect-auto"
-  ></video>
+    class="responsive-video aspect-auto"></video>
 </div>
 
 <style is:global>
@@ -88,7 +87,9 @@ const placeholder = isExternal ? '' : cldPoster(src, "f_auto,q_auto,w_20");
         // Metadatos ya disponibles (ej: caché)
         applyAspectRatio();
       } else {
-        video.addEventListener("loadedmetadata", applyAspectRatio, { once: true });
+        video.addEventListener("loadedmetadata", applyAspectRatio, {
+          once: true,
+        });
       }
 
       if (video.readyState >= 3) {
@@ -99,5 +100,7 @@ const placeholder = isExternal ? '' : cldPoster(src, "f_auto,q_auto,w_20");
     });
   }
 
-  document.addEventListener("astro:page-load", setupResponsiveVideos);
+  document.addEventListener("astro:page-load", () => {
+    requestAnimationFrame(setupResponsiveVideos);
+  });
 </script>

@@ -74,8 +74,11 @@ const placeholder = cld(src, "f_auto,q_auto,w_20");
 
     images.forEach((el) => {
       const img = el as HTMLImageElement;
+      let isLoaded = false;
 
       const markAsLoaded = () => {
+        if (isLoaded) return;
+        isLoaded = true;
         img.classList.add("loaded");
         // Quitar placeholder después de la transición para evitar parpadeos
         setTimeout(() => {
@@ -84,21 +87,36 @@ const placeholder = cld(src, "f_auto,q_auto,w_20");
       };
 
       const markAsError = () => {
-        img.classList.add("loaded"); // Quitamos blur aunque sea error
+        img.classList.add("loaded");
         img.style.filter = "none";
+        img.style.webkitFilter = "none";
       };
 
-      // Si ya cargó (cache), ejecutar inmediatamente
+      // Check inmediato
       if (img.complete && img.naturalWidth > 0) {
         markAsLoaded();
       } else {
-        // Si no, esperar al evento load
+        // Listener estándar
         img.addEventListener("load", markAsLoaded, { once: true });
         img.addEventListener("error", markAsError, { once: true });
+
+        // Safari / Modern browsers fix: decode()
+        if ("decode" in img) {
+          img
+            .decode()
+            .then(() => {
+              markAsLoaded();
+            })
+            .catch(() => {
+              // Si falla el decode pero la imagen termina cargando igual, el listener 'load' se encarga
+            });
+        }
       }
     });
   }
 
-  // Ejecutar en cada carga de página (soporte para View Transitions)
-  document.addEventListener("astro:page-load", setupResponsiveImages);
+  // Ejecutar en cada carga de página
+  document.addEventListener("astro:page-load", () => {
+    requestAnimationFrame(setupResponsiveImages);
+  });
 </script>

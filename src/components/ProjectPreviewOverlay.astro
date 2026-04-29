@@ -41,7 +41,7 @@
       container.innerHTML = "";
       const videoMap = new Map();
 
-      items.forEach((item, index) => {
+      items.forEach((item) => {
         const videoSrc = item.getAttribute("data-video");
         const videoStyle = item.getAttribute("video-style") || "";
         const aspectRatio = item.getAttribute("data-aspect-ratio") || "";
@@ -74,7 +74,12 @@
 
           const handleMetadata = () => {
             if (video.videoWidth && video.videoHeight) {
-              video.style.aspectRatio = `${video.videoWidth} / ${video.videoHeight}`;
+              const ratio = `${video.videoWidth} / ${video.videoHeight}`;
+              video.style.aspectRatio = ratio;
+              // También actualizar el contenedor si este video es el que se está mostrando actualmente
+              if (video.style.opacity === "1") {
+                container.style.aspectRatio = ratio;
+              }
             }
             video.removeEventListener("loadedmetadata", handleMetadata);
           };
