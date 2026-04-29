@@ -22,10 +22,10 @@ const srcset = widths
   .join(", ");
 
 // fallback
-const fallback = cld(src, "f_auto,q_auto,w_800");
+const fallback = cld(src, "f_auto:good,q_auto,w_800");
 
 // placeholder blur
-const placeholder = cld(src, "f_auto,q_auto,w_20");
+const placeholder = cld(src, "f_auto:good,q_auto,w_20");
 ---
 
 <img
