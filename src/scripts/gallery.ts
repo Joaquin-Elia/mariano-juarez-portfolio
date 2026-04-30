@@ -110,6 +110,8 @@ export const initGallery = () => {
     const material = new THREE.MeshBasicMaterial({
       side: THREE.DoubleSide,
       color: 0x999999,
+      transparent: true,
+      alphaTest: 0.05,
     });
     const mesh = new THREE.Mesh(geometry, material);
 
@@ -119,19 +121,48 @@ export const initGallery = () => {
       index: i,
     };
 
-    textureLoader.load(galleryImgs[i].img, (texture) => {
-      texture.colorSpace = THREE.SRGBColorSpace;
-      material.map = texture;
+    const mediaSrc = galleryImgs[i].img;
+    const isVideo = mediaSrc.endsWith(".mp4") || mediaSrc.endsWith(".webm") || mediaSrc.endsWith(".mov");
+
+    const setupTexture = (tex: THREE.Texture, imgW: number, imgH: number) => {
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.minFilter = THREE.LinearFilter;
+
+      const imageAspect = imgW / imgH;
+      
+      // Recrear geometría con el aspecto real
+      mesh.geometry.dispose();
+      mesh.geometry = new THREE.PlaneGeometry(height * imageAspect, height, 32, 16);
+      
+      // Actualizar vértices originales para la distorsión
+      mesh.userData.originalVertices = [...mesh.geometry.attributes.position.array];
+
+      material.map = tex;
       material.color.set(0xffffff);
       material.needsUpdate = true;
+    };
 
-      const imageAspect = texture.image.width / texture.image.height;
-      const planeAspect = width / height;
-      const ratio = imageAspect / planeAspect;
+    if (isVideo) {
+      const video = document.createElement("video");
+      video.src = mediaSrc;
+      video.crossOrigin = "anonymous";
+      video.loop = true;
+      video.muted = true;
+      video.playsInline = true;
+      video.autoplay = true;
+      video.play().catch(() => {});
 
-      if (ratio > 1) mesh.scale.y = 1 / ratio;
-      else mesh.scale.x = ratio;
-    });
+      const texture = new THREE.VideoTexture(video);
+      mesh.userData.video = video;
+
+      video.addEventListener("loadedmetadata", () => {
+        setupTexture(texture, video.videoWidth, video.videoHeight);
+      });
+    } else {
+      textureLoader.load(mediaSrc, (texture) => {
+        setupTexture(texture, texture.image.width, texture.image.height);
+      });
+    }
 
     scene.add(mesh);
     meshes.push(mesh);
@@ -367,6 +398,11 @@ export const cleanupGallery = () => {
   if (scene) {
     scene.traverse((object) => {
       if (object instanceof THREE.Mesh) {
+        if (object.userData && object.userData.video) {
+          object.userData.video.pause();
+          object.userData.video.removeAttribute("src");
+          object.userData.video.load();
+        }
         object.geometry.dispose();
         if (object.material.map) {
           object.material.map.dispose();
