@@ -72,27 +72,50 @@
             video.style.aspectRatio = aspectRatio;
           }
 
+          let isLoaded = false;
+          let checkInterval: number;
+
           const handleMetadata = () => {
             if (video.videoWidth && video.videoHeight) {
               const ratio = `${video.videoWidth} / ${video.videoHeight}`;
               video.style.aspectRatio = ratio;
-              // También actualizar el contenedor si este video es el que se está mostrando actualmente
               if (video.style.opacity === "1") {
                 container.style.aspectRatio = ratio;
               }
             }
-            video.removeEventListener("loadedmetadata", handleMetadata);
           };
-          video.addEventListener("loadedmetadata", handleMetadata);
 
           const handleCanPlay = () => {
+            if (isLoaded) return;
+            isLoaded = true;
+            clearInterval(checkInterval);
             video.classList.add("loaded");
-            video.removeEventListener("canplay", handleCanPlay);
           };
-          video.addEventListener("canplay", handleCanPlay);
+
+          video.addEventListener("loadedmetadata", () => {
+            handleMetadata();
+            video.removeEventListener("loadedmetadata", handleMetadata);
+          });
+
+          video.addEventListener("canplay", () => {
+            handleCanPlay();
+            video.removeEventListener("canplay", handleCanPlay);
+          });
+
+          // Fallback check for Safari 16
+          checkInterval = setInterval(() => {
+            if (video.readyState >= 1) {
+              handleMetadata();
+            }
+            if (video.readyState >= 3) {
+              handleCanPlay();
+            }
+          }, 300) as unknown as number;
+
+          setTimeout(() => clearInterval(checkInterval), 15000);
 
           if (video.readyState >= 3) {
-            video.classList.add("loaded");
+            handleCanPlay();
           }
 
           container.appendChild(video);

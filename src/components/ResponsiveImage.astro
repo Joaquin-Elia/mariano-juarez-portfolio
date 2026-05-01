@@ -34,7 +34,6 @@ const placeholder = cld(src, "f_auto,q_auto,w_20");
   sizes={sizes}
   alt={alt}
   loading="lazy"
-  decoding="async"
   style={`background-image: url('${placeholder}')`}
   class="responsive-img aspect-auto"
 />
@@ -49,8 +48,7 @@ const placeholder = cld(src, "f_auto,q_auto,w_20");
     aspect-ratio: 1/1;
     filter: blur(1rem);
     -webkit-filter: blur(1rem);
-    transform: scale(1.05) translateZ(0);
-    will-change: filter, transform;
+    transform: translate3d(0, 0, 0) scale(1.05);
     opacity: 0.9;
     transition:
       filter 0.6s ease,
@@ -63,7 +61,7 @@ const placeholder = cld(src, "f_auto,q_auto,w_20");
     aspect-ratio: auto;
     filter: blur(0);
     -webkit-filter: blur(0);
-    transform: scale(1) translateZ(0);
+    transform: translate3d(0, 0, 0) scale(1);
     opacity: 1;
   }
 </style>
@@ -75,42 +73,44 @@ const placeholder = cld(src, "f_auto,q_auto,w_20");
     images.forEach((el) => {
       const img = el as HTMLImageElement;
       let isLoaded = false;
+      let checkInterval: number;
 
       const markAsLoaded = () => {
         if (isLoaded) return;
         isLoaded = true;
+        clearInterval(checkInterval);
         img.classList.add("loaded");
-        // Quitar placeholder después de la transición para evitar parpadeos
         setTimeout(() => {
           img.style.backgroundImage = "none";
         }, 600);
       };
 
       const markAsError = () => {
+        clearInterval(checkInterval);
         img.classList.add("loaded");
         img.style.filter = "none";
         img.style.webkitFilter = "none";
       };
 
-      // Check inmediato
       if (img.complete && img.naturalWidth > 0) {
         markAsLoaded();
       } else {
-        // Listener estándar
         img.addEventListener("load", markAsLoaded, { once: true });
         img.addEventListener("error", markAsError, { once: true });
 
-        // Safari / Modern browsers fix: decode()
         if ("decode" in img) {
-          img
-            .decode()
-            .then(() => {
-              markAsLoaded();
-            })
-            .catch(() => {
-              // Si falla el decode pero la imagen termina cargando igual, el listener 'load' se encarga
-            });
+          img.decode().then(markAsLoaded).catch(() => {});
         }
+
+        // Safari iOS 16 Fallback: Poll for completion if events are missed
+        checkInterval = setInterval(() => {
+          if (img.complete && img.naturalWidth > 0) {
+            markAsLoaded();
+          }
+        }, 300) as unknown as number;
+        
+        // Stop polling after 15 seconds to save resources
+        setTimeout(() => clearInterval(checkInterval), 15000);
       }
     });
   }

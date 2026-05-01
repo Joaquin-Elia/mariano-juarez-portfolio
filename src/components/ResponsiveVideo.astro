@@ -41,8 +41,7 @@ const placeholder = isExternal ? "" : cldPoster(src, "f_auto,q_auto,w_20");
     background-position: center;
     filter: blur(10rem);
     -webkit-filter: blur(10rem);
-    transform: scale(1.05) translateZ(0);
-    will-change: filter, transform;
+    transform: translate3d(0, 0, 0) scale(1.05);
     opacity: 0;
     transition:
       filter 0.8s cubic-bezier(0.4, 0, 0.2, 1),
@@ -55,7 +54,7 @@ const placeholder = isExternal ? "" : cldPoster(src, "f_auto,q_auto,w_20");
     aspect-ratio: auto !important;
     filter: blur(0);
     -webkit-filter: blur(0);
-    transform: scale(1) translateZ(0);
+    transform: translate3d(0, 0, 0) scale(1);
     opacity: 1;
   }
 </style>
@@ -66,17 +65,20 @@ const placeholder = isExternal ? "" : cldPoster(src, "f_auto,q_auto,w_20");
 
     videos.forEach((el) => {
       const video = el as HTMLVideoElement;
+      let isLoaded = false;
+      let checkInterval: number;
 
       const markAsLoaded = () => {
+        if (isLoaded) return;
+        isLoaded = true;
+        clearInterval(checkInterval);
         video.classList.add("loaded");
-        // Quitar el aspect-ratio fijado para que el browser use las dimensiones reales
         video.style.aspectRatio = "";
         setTimeout(() => {
           video.style.backgroundImage = "none";
         }, 800);
       };
 
-      // loadedmetadata llega antes que canplay: ya sabemos ancho y alto reales
       const applyAspectRatio = () => {
         if (video.videoWidth && video.videoHeight) {
           video.style.aspectRatio = `${video.videoWidth} / ${video.videoHeight}`;
@@ -84,7 +86,6 @@ const placeholder = isExternal ? "" : cldPoster(src, "f_auto,q_auto,w_20");
       };
 
       if (video.readyState >= 1) {
-        // Metadatos ya disponibles (ej: caché)
         applyAspectRatio();
       } else {
         video.addEventListener("loadedmetadata", applyAspectRatio, {
@@ -96,6 +97,17 @@ const placeholder = isExternal ? "" : cldPoster(src, "f_auto,q_auto,w_20");
         markAsLoaded();
       } else {
         video.addEventListener("canplay", markAsLoaded, { once: true });
+        
+        // Safari iOS 16 Fallback
+        checkInterval = setInterval(() => {
+          if (video.readyState >= 3) {
+            markAsLoaded();
+          } else if (video.videoWidth && video.videoHeight) {
+            applyAspectRatio();
+          }
+        }, 300) as unknown as number;
+
+        setTimeout(() => clearInterval(checkInterval), 15000);
       }
     });
   }
