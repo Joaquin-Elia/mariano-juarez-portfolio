@@ -49,19 +49,23 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
 
     <main class="grow px-3 lg:px-8 pt-6 md:pt-0" id="main-content">
       <div
-        class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-2 items-start relative"
+        class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-4 items-start relative"
       >
         <!-- Text Content -->
         <aside
           class="space-y-4 lg:col-span-4 2xl:col-span-3 lg:sticky lg:top-[50dvh] lg:-translate-y-1/2 flex flex-col justify-center font-space-mono"
         >
           <BackBtn />
-
-          <h1
-            class="font-space-mono-bold text-3xl md:text-4xl 2xl:text-5xl tracking-tight leading-none uppercase"
-          >
-            {project.title}
-          </h1>
+          <div class="flex items-end justify-between">
+            <h1
+              class="font-space-mono-bold text-3xl md:text-4xl tracking-tight md:tracking-tighter leading-none uppercase"
+            >
+              {project.title}
+            </h1>
+            <span class="text-gray-500 text-xs md:text-sm">
+              {project.year}</span
+            >
+          </div>
 
           <p
             class="inline-block font-space-mono text-sm leading-tight lg:text-base text-justify uppercase"
@@ -74,26 +78,64 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
 
         <!-- Media Gallery -->
         <section
-          class="lg:col-span-8 2xl:col-span-9 grid gap-4 lg:gap-0 md:grid-cols-2 relative lg:mt-6"
+          class="lg:col-span-8 2xl:col-span-9 grid gap-0 md:grid-cols-2 relative lg:mt-6"
           aria-label="Galería de medios del proyecto"
         >
           {
-            project.media.map((item, index) => (
-              <figure
-                class={`draggable-item relative group rounded-sm md:cursor-grab md:active:cursor-grabbing select-none md:touch-none max-w-5xl mx-auto ${item.fullWidth ? "md:col-span-2 w-full" + (item.margin ? " md:my-10" : "md:-my-16") : "lg:w-[35vw] 2xl:w-[40vw]" + (!item.fullWidth && index % 2 !== 0 ? "mt-10 md:mt-12" : "")}`}
-              >
-                {item.type === "video" ? (
-                  <ResponsiveVideo src={item.src} />
-                ) : (
-                  <ResponsiveImage src={item.src} alt={item.caption} />
-                )}
-                {item.caption && (
-                  <figcaption class="mt-4 font-space-mono text-sm uppercase tracking-widest opacity-50 p-2">
-                    {item.caption}
-                  </figcaption>
-                )}
-              </figure>
-            ))
+            project.media.map((content, index) => {
+              if ("type" in content && content.type === "row") {
+                const isGrid = content.layout === "grid";
+                const isOverlap = content.layout === "overlap";
+
+                return (
+                  <div
+                    class={`col-span-1 md:col-span-2 w-full flex flex-col md:flex-row gap-0 ${isOverlap ? "md:items-center md:justify-center relative min-h-[50vh] py-20 md:py-40" : "my-0"}`}
+                  >
+                    {content.items.map((item) => (
+                      <figure
+                        class={`draggable-item relative group rounded-sm md:cursor-grab md:active:cursor-grabbing select-none md:touch-none ${
+                          isGrid
+                            ? `md:flex-1 w-full`
+                            : isOverlap
+                              ? "absolute first:relative"
+                              : ""
+                        } ${item.customClass || ""}`}
+                      >
+                        {item.type === "video" ? (
+                          <ResponsiveVideo src={item.src} />
+                        ) : (
+                          <ResponsiveImage src={item.src} alt={item.caption} />
+                        )}
+                        {item.caption && (
+                          <figcaption class="mt-4 font-space-mono text-sm uppercase tracking-widest opacity-50 p-2">
+                            {item.caption}
+                          </figcaption>
+                        )}
+                      </figure>
+                    ))}
+                  </div>
+                );
+              }
+
+              // Fallback for single items (backward compatibility)
+              const item = content as any;
+              return (
+                <figure
+                  class={`draggable-item relative group rounded-sm md:cursor-grab md:active:cursor-grabbing select-none md:touch-none max-w-5xl ${item.fullWidth ? "md:col-span-2 w-full max-w-none" : "lg:w-[35vw] 2xl:w-[40vw] max-w-3xl"} ${item.customClass || ""}`}
+                >
+                  {item.type === "video" ? (
+                    <ResponsiveVideo src={item.src} />
+                  ) : (
+                    <ResponsiveImage src={item.src} alt={item.caption} />
+                  )}
+                  {item.caption && (
+                    <figcaption class="mt-4 font-space-mono text-sm uppercase tracking-widest opacity-50 p-2">
+                      {item.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              );
+            })
           }
         </section>
       </div>
@@ -114,42 +156,13 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
         href={`/proyectos/${nextProject.slug}`}
         class="p-1.5 pointer-events-auto"
       >
-        <span class="inline-block bg-yellow text-black px-0.5 uppercase box-decoration-clone font-space-mono-bold text-2xl leading-none hover:blur-[1.5px] transition-all duration-300"
-          >Siguiente proyecto →</span
+        <span
+          class="inline-block bg-yellow text-black px-0.5 uppercase box-decoration-clone font-space-mono-bold text-2xl leading-none hover:blur-[1.5px] transition-all duration-300"
         >
+          Siguiente proyecto →
+        </span>
       </a>
     </footer>
-    <!-- Footer / Next Project -->
-    <!-- <footer class="bg-black text-white py-24 px-3 lg:px-8 overflow-hidden relative">
-      <div class="max-w-7xl mx-auto relative z-10">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-12">
-          <div class="text-center md:text-left">
-            <span class="block font-space-mono text-yellow uppercase tracking-widest mb-4 opacity-70">
-              ¿Vemos más?
-            </span>
-            <a href={`/proyectos/${nextProject.slug}`} class="group block">
-              <h2 class="text-with-border-white text-6xl md:text-9xl transition-all group-hover:blur-[2px]">
-                {nextProject.title}
-              </h2>
-            </a>
-          </div>
-          
-          <div class="flex flex-col items-center md:items-end gap-8">
-            <a href={`/proyectos/${nextProject.slug}`} class="bg-yellow text-black px-12 py-6 font-space-mono-bold text-2xl uppercase hover:scale-105 transition-transform">
-              Siguiente →
-            </a>
-            <p class="font-space-mono text-sm opacity-50">Mariano Juarez © 2026</p>
-          </div>
-        </div>
-      </div>
-       -->
-    <!-- Decorative background text -->
-    <!-- <div class="absolute inset-0 flex items-center justify-center opacity-5 select-none pointer-events-none">
-        <span class="text-[30vw] font-raster whitespace-nowrap leading-none uppercase">
-          {nextProject.title}
-        </span>
-      </div>
-    </footer> -->
   </div>
 </Layout>
 
