@@ -16,7 +16,24 @@ const { title = "Mariano Juarez" } = Astro.props;
     <link rel="icon" type="image/png" href="/icon.png" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <!-- Primary Meta Tags -->
+    <title>Mariano Juarez</title>
+    <meta name="title" content="Mariano Juarez" />
+    <meta name="description" content="" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://marianojuarez.com.ar/" />
+    <meta property="og:title" content="Mariano Juarez" />
+    <meta property="og:description" content="" />
+    <meta property="og:image" content="images/poster.png" />
+
+    <!-- X (Twitter) -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://marianojuarez.com.ar/" />
+    <meta property="twitter:title" content="Mariano Juarez" />
+    <meta property="twitter:description" content="" />
+    <meta property="twitter:image" content="images/poster.png" />
     <ClientRouter />
   </head>
   <body>
